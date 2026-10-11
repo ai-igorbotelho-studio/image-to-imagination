@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>image-to-imagination spike bench (stage 2)</title>
+<style>
+body{font:14px system-ui;margin:12px;max-width:1100px}
+canvas{max-width:100%;border:1px solid #ccc;background:repeating-conic-gradient(#eee 0 25%,#fff 0 50%) 0 0/16px 16px}
+pre{background:#111;color:#8f8;padding:8px;overflow:auto;max-height:260px}
+label{display:inline-block;margin:2px 8px 2px 0}
+.row{margin:8px 0}
+</style></head><body>
+<h3>Stage 2 spike bench</h3>
+<p>Local only. Nothing is uploaded. Serve with <code>node serve.mjs</code> (adds COOP/COEP for WASM threads).</p>
+<div class="row"><input type="file" id="file" accept="image/*"> <span id="imginfo"></span></div>
+<div class="row">
+ <label>Segmentation <select id="seg"><option>birefnet_lite_fp16</option><option>birefnet_lite_fp32</option><option>modnet_fp16</option><option>isnet_fp16</option><option>isnet_q</option><option>u2netp</option><option>u2net</option><option>modnet_q</option></select></label>
+ <label>Backend <select id="ep"><option>wasm</option><option>webgpu</option></select></label>
+ <label>Threads <input id="threads" type="number" value="1" min="1" max="8" style="width:3em"></label>
+ <button id="bSeg">Remove background</button>
+</div>
+<div class="row">
+ <label>Upscale <select id="up"><option>swin2sr_x2_q</option><option>realesr_general_x4v3</option><option>swin2sr_x2_fp16</option></select></label>
+ <label>Tile <input id="tile" type="number" value="96" style="width:4em"></label>
+ <button id="bUp">Upscale x2 (tiled)</button>
+ <button id="bLimits">Probe canvas limits</button>
+</div>
+<div class="row">
+ <label>Style <select id="style"><option>halftone</option><option>duotone</option><option>posterize</option><option>sketch</option></select></label>
+ <button id="bStyle">Apply style</button>
+ <label>Pattern <select id="pat"><option>grid</option><option>halfdrop</option><option>mirror</option></select></label>
+ <button id="bPat">Apply pattern</button>
+</div>
+<pre id="log"></pre>
+<canvas id="out"></canvas>
+<script src="vendor/ort.min.js"></script>
+<script type="module" src="bench.js"></script>
+</body></html>

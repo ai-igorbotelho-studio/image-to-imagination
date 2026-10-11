@@ -1,0 +1,5 @@
+models/
+samples/
+results/*.png
+results/*.jpg
+vendor/

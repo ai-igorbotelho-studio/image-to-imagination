@@ -1,0 +1,263 @@
+{
+ "profile": "desktop",
+ "env": {
+  "ua": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.0.0 Safari/537.36",
+  "isolated": true,
+  "cores": 4,
+  "mem": 8,
+  "webgpu": true,
+  "vw": 1280,
+  "vh": 800
+ },
+ "runs": [
+  {
+   "img": "portrait-of-woman_small.jpg",
+   "cold": {
+    "stage": "segment",
+    "model": "modnet_fp16",
+    "ep": "wasm",
+    "threads": 4,
+    "src": "360x450",
+    "inputName": "input",
+    "inputType": "float32",
+    "modelBytesMB": 12.4,
+    "loadMs": 1547,
+    "cached": false,
+    "inferMs": 2273,
+    "totalMs": 3950,
+    "heapBeforeMB": 5,
+    "heapAfterMB": 25
+   },
+   "warm": {
+    "stage": "segment",
+    "model": "modnet_fp16",
+    "ep": "wasm",
+    "threads": 4,
+    "src": "360x450",
+    "inputName": "input",
+    "inputType": "float32",
+    "modelBytesMB": null,
+    "loadMs": 0,
+    "cached": true,
+    "inferMs": 1396,
+    "totalMs": 1466,
+    "heapBeforeMB": 25,
+    "heapAfterMB": 30
+   }
+  },
+  {
+   "img": "tiger.jpg",
+   "cold": {
+    "stage": "segment",
+    "model": "modnet_fp16",
+    "ep": "wasm",
+    "threads": 4,
+    "src": "612x408",
+    "inputName": "input",
+    "inputType": "float32",
+    "modelBytesMB": null,
+    "loadMs": 0,
+    "cached": true,
+    "inferMs": 709,
+    "totalMs": 773,
+    "heapBeforeMB": 7,
+    "heapAfterMB": 12
+   },
+   "warm": {
+    "stage": "segment",
+    "model": "modnet_fp16",
+    "ep": "wasm",
+    "threads": 4,
+    "src": "612x408",
+    "inputName": "input",
+    "inputType": "float32",
+    "modelBytesMB": null,
+    "loadMs": 0,
+    "cached": true,
+    "inferMs": 527,
+    "totalMs": 543,
+    "heapBeforeMB": 12,
+    "heapAfterMB": 17
+   }
+  },
+  {
+   "img": "cats.jpg",
+   "cold": {
+    "stage": "segment",
+    "model": "modnet_fp16",
+    "ep": "wasm",
+    "threads": 4,
+    "src": "640x480",
+    "inputName": "input",
+    "inputType": "float32",
+    "modelBytesMB": null,
+    "loadMs": 0,
+    "cached": true,
+    "inferMs": 635,
+    "totalMs": 668,
+    "heapBeforeMB": 16,
+    "heapAfterMB": 14
+   },
+   "warm": {
+    "stage": "segment",
+    "model": "modnet_fp16",
+    "ep": "wasm",
+    "threads": 4,
+    "src": "640x480",
+    "inputName": "input",
+    "inputType": "float32",
+    "modelBytesMB": null,
+    "loadMs": 0,
+    "cached": true,
+    "inferMs": 511,
+    "totalMs": 532,
+    "heapBeforeMB": 14,
+    "heapAfterMB": 19
+   }
+  },
+  {
+   "img": "bread_small.png",
+   "cold": {
+    "stage": "segment",
+    "model": "modnet_fp16",
+    "ep": "wasm",
+    "threads": 4,
+    "src": "640x424",
+    "inputName": "input",
+    "inputType": "float32",
+    "modelBytesMB": null,
+    "loadMs": 0,
+    "cached": true,
+    "inferMs": 511,
+    "totalMs": 553,
+    "heapBeforeMB": 10,
+    "heapAfterMB": 23
+   },
+   "warm": {
+    "stage": "segment",
+    "model": "modnet_fp16",
+    "ep": "wasm",
+    "threads": 4,
+    "src": "640x424",
+    "inputName": "input",
+    "inputType": "float32",
+    "modelBytesMB": null,
+    "loadMs": 0,
+    "cached": true,
+    "inferMs": 606,
+    "totalMs": 626,
+    "heapBeforeMB": 23,
+    "heapAfterMB": 24
+   }
+  },
+  {
+   "upscale": {
+    "stage": "upscale",
+    "model": "swin2sr_x2_q",
+    "tile": 96,
+    "tiles": 20,
+    "src": "360x450",
+    "dst": "720x900",
+    "loadMs": 20835,
+    "cached": false,
+    "inferMs": 74448,
+    "totalMs": 95365,
+    "msPerSrcMP": 459553,
+    "heapBeforeMB": 23,
+    "heapAfterMB": 36
+   }
+  },
+  {
+   "upscale": "swin2sr_x2_fp16",
+   "error": "Error: page.evaluate: Error: failed to call OrtRun(). ERROR_CODE: 1, ERROR_MESSAGE: /mnt/azure_nvme_temp/_work/1/s/onnxruntime/core/framework/op_kernel.cc:83 virtual OrtValue *onnxruntime::OpKernelContext::OutputMLValue(int, const TensorShape &) [ONNXRuntimeError] : 1 : FAIL : Shape mismatch attempt"
+  }
+ ],
+ "canvas": [
+  {
+   "size": "4096x4096",
+   "mp": 16.8,
+   "ok": true,
+   "readback": true,
+   "err": null
+  },
+  {
+   "size": "4500x5400",
+   "mp": 24.3,
+   "ok": true,
+   "readback": true,
+   "err": null
+  },
+  {
+   "size": "5000x5000",
+   "mp": 25,
+   "ok": true,
+   "readback": true,
+   "err": null
+  },
+  {
+   "size": "8192x8192",
+   "mp": 67.1,
+   "ok": true,
+   "readback": true,
+   "err": null
+  },
+  {
+   "size": "10000x10000",
+   "mp": 100,
+   "ok": true,
+   "readback": true,
+   "err": null
+  },
+  {
+   "size": "16384x16384",
+   "mp": 268.4,
+   "ok": true,
+   "readback": true,
+   "err": null
+  }
+ ],
+ "styles": [
+  {
+   "stage": "style",
+   "kind": "halftone",
+   "size": "360x450",
+   "ms": 21
+  },
+  {
+   "stage": "style",
+   "kind": "duotone",
+   "size": "360x450",
+   "ms": 11
+  },
+  {
+   "stage": "style",
+   "kind": "posterize",
+   "size": "360x450",
+   "ms": 9
+  },
+  {
+   "stage": "style",
+   "kind": "sketch",
+   "size": "360x450",
+   "ms": 27
+  },
+  {
+   "stage": "pattern",
+   "kind": "grid",
+   "out": "2000x2000",
+   "ms": 42
+  },
+  {
+   "stage": "pattern",
+   "kind": "halfdrop",
+   "out": "2000x2000",
+   "ms": 28
+  },
+  {
+   "stage": "pattern",
+   "kind": "mirror",
+   "out": "2000x2000",
+   "ms": 31
+  }
+ ]
+}
