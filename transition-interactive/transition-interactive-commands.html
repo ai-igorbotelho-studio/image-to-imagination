@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transition Interactive — Commands</title>
+<meta name="description" content="Copy-ready commands to trigger the 33 transition-interactive subagents in Claude Code — by role, by goal, or the whole pipeline.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+
+  :root{
+    --ground:#FAFAF9;
+    --surface:#FFFFFF;
+    --surface-2:#F4F4F2;
+    --ink:#16181D;
+    --ink-soft:#6B7078;
+    --line:#7E868F;
+    --accent:#3B5BFF;
+    --accent-soft:#EEF1FF;
+    --highlight:#C2410C;
+    --highlight-soft:#FBE7DC;
+    --accent-2:#0F766E;
+    --accent-2-soft:#DDF3F0;
+    --header-bg:#E8ECFA;
+    /* group dots (used as small accents only) */
+    --g-lider:#93762e; --g-design:#a5623f; --g-eng:#2f8f6a;
+    --g-qa:#6a5aa0; --g-content:#3d72a8; --g-util:#74808a;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#0B0C0F;
+      --surface:#15171C;
+      --surface-2:#1C1F26;
+      --ink:#EDEEF1;
+      --ink-soft:#9599A3;
+      --line:#666B75;
+      --accent:#7C93FF;
+      --accent-soft:#1B2038;
+      --highlight:#F0895A;
+      --highlight-soft:#2A1A12;
+      --accent-2:#4FD1C0;
+      --accent-2-soft:#0F2723;
+      --header-bg:#191D30;
+      --g-lider:#d6b872; --g-design:#d99e7f; --g-eng:#7ec79c;
+      --g-qa:#b3a6e0; --g-content:#8db8e6; --g-util:#a9b4bf;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0B0C0F; --surface:#15171C; --surface-2:#1C1F26; --ink:#EDEEF1;
+    --ink-soft:#9599A3; --line:#666B75; --accent:#7C93FF; --accent-soft:#1B2038;
+    --highlight:#F0895A; --highlight-soft:#2A1A12; --accent-2:#4FD1C0; --accent-2-soft:#0F2723;
+    --header-bg:#191D30;
+    --g-lider:#d6b872; --g-design:#d99e7f; --g-eng:#7ec79c;
+    --g-qa:#b3a6e0; --g-content:#8db8e6; --g-util:#a9b4bf;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--ground);
+    color:var(--ink);
+    font-family:"Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding-inline:20px;padding-block:48px 80px}
+  a{color:var(--accent)}
+
+  h1{
+    font-family:"Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    font-weight:600;font-size:clamp(2.1rem,4.5vw,2.75rem);line-height:1.05;
+    letter-spacing:-.015em;text-wrap:balance;margin:.1em 0 .35em;
+  }
+  .lead{color:var(--ink-soft);font-size:1rem;max-width:62ch;margin:14px 0 0}
+  .creds{color:var(--ink-soft);font-size:.86rem;max-width:62ch;margin:10px 0 0;
+    padding-left:12px;border-left:2px solid var(--accent-2)}
+  h1{margin:0}
+  .subtitle{font-family:"JetBrains Mono",monospace;text-transform:lowercase;letter-spacing:.04em;
+    font-size:.95rem;color:var(--accent);margin:6px 0 0;font-weight:500}
+  .eyebrow{
+    text-transform:uppercase;letter-spacing:.08em;font-size:.72rem;font-weight:600;
+    color:var(--ink-soft);margin:0 0 .7em;
+  }
+  /* Header band flows straight into the sticky nav — no white gap between them. */
+  .topband{margin:-48px -20px 0;padding:48px 20px 16px;background:var(--header-bg)}
+  .statbar{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
+  .stat{display:inline-flex;align-items:baseline;gap:6px;font-family:"JetBrains Mono",monospace;
+    font-size:.74rem;font-weight:500;color:var(--ink-soft);background:var(--surface);
+    border:1px solid var(--line);border-radius:999px;padding:6px 12px;white-space:nowrap}
+  .stat b{color:var(--ink);font-weight:700;font-size:.82rem}
+  .stat.key{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+  .stat.key b{color:var(--ground)}
+  /* Sticky nav: it's a direct child of .wrap (not the topband) so its sticky
+     containing block is the full page — it stays pinned at the top the whole
+     way down. Full-bleed side margins so pinned content never peeks past it. */
+  .nav{position:sticky;top:0;z-index:10;display:flex;flex-wrap:nowrap;gap:8px;
+    padding:12px 20px;margin:0 -20px 8px;background:var(--header-bg);border-bottom:1px solid var(--line);
+    overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{flex:none}
+  .nav a{font-family:"JetBrains Mono",monospace;font-size:.75rem;font-weight:500;text-decoration:none;
+    color:var(--ink-soft);border:1px solid var(--line);border-radius:8px;padding:6px 11px;
+    transition:color .14s ease,background .14s ease,border-color .14s ease}
+  .nav a:hover,.nav a:focus-visible{color:var(--accent);background:var(--accent-soft);border-color:var(--accent);outline:none}
+  h2{scroll-margin-top:76px}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  .rule-note{
+    margin-top:24px;padding:14px 16px;border:1px solid var(--line);border-left:3px solid var(--highlight);
+    background:var(--surface);border-radius:4px 12px 12px 4px;color:var(--ink-soft);font-size:.93rem;
+  }
+  .rule-note strong{color:var(--ink);font-weight:600}
+  .rule-note strong:first-child{color:var(--highlight)}
+  .rule-note code{background:var(--surface-2);color:var(--ink);font-weight:500;padding:1px 6px;border-radius:5px}
+
+  h2{
+    font-family:"Space Grotesk", ui-sans-serif, sans-serif;font-weight:600;font-size:1.4rem;
+    letter-spacing:-.01em;margin:56px 0 6px;
+  }
+  .section-sub{color:var(--ink-soft);font-size:.9rem;margin:0 0 18px}
+
+  code{font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;overflow-wrap:anywhere}
+
+  .slash{width:100%;border-collapse:collapse;background:var(--surface);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .slash th,.slash td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);font-size:.93rem}
+  .slash tr:last-child td{border-bottom:0}
+  .slash th{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);font-weight:600;background:var(--surface-2)}
+  .slash td code{color:var(--accent);font-weight:500;background:transparent;padding:0}
+
+  .map{margin-top:12px}
+  .map-head{display:inline-flex;align-items:center;gap:9px;font-family:"Space Grotesk",sans-serif;
+    font-weight:600;background:var(--accent-2-soft);color:var(--accent-2);border:1px solid var(--accent-2);
+    padding:9px 15px;border-radius:11px;font-size:.95rem}
+  .map-head .dot{width:8px;height:8px;border-radius:50%;background:var(--accent-2);flex:none}
+  .map-rail{margin:8px 0 0 13px;border-left:2px solid var(--line);padding-left:20px;display:grid;gap:16px}
+  .branch{position:relative}
+  .branch::before{content:"";position:absolute;left:-20px;top:11px;width:13px;height:2px;background:var(--line)}
+  .branch-label{display:flex;align-items:center;gap:8px;font-size:.72rem;text-transform:uppercase;
+    letter-spacing:.08em;font-weight:600;color:var(--ink-soft);margin-bottom:8px}
+  .branch-label .dot{width:7px;height:7px;border-radius:50%;flex:none}
+  .agents{display:flex;flex-wrap:wrap;gap:6px}
+  .agents span,.agents a{font-family:"JetBrains Mono",monospace;font-size:.72rem;color:var(--ink);
+    background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:4px 8px;
+    overflow-wrap:anywhere;text-decoration:none;transition:color .14s ease,background .14s ease,border-color .14s ease}
+  .agents a:hover,.agents a:focus-visible{color:var(--accent);background:var(--accent-soft);border-color:var(--accent);outline:none}
+  .agents span.cond::after,.agents a.cond::after{content:" *";color:var(--highlight);font-weight:700}
+  .agents a.lead{border-color:var(--accent-2);color:var(--accent-2);font-weight:600}
+  .agents a.lead::before{content:"★ ";font-size:.7em;vertical-align:1px}
+  .map-head{cursor:pointer}
+  a.map-head{text-decoration:none}
+  .map-note{margin:14px 0 0;font-size:.8rem;color:var(--ink-soft)}
+  .map-note b{color:var(--highlight)}
+
+  .group{margin-top:36px}
+  .group-head{display:flex;align-items:center;gap:9px;margin:0 0 12px}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;text-transform:uppercase;
+    letter-spacing:.08em;font-weight:600;color:var(--ink-soft);min-width:0;overflow-wrap:anywhere}
+  .chip .dot{width:6px;height:6px;border-radius:50%;flex:none}
+  .group-line{flex:1;height:1px;background:var(--line)}
+
+  .cmd{
+    display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+    background:var(--surface);border:1px solid var(--line);border-radius:11px;
+    padding:12px 14px;margin-bottom:8px;color:var(--ink);
+    transition:background .14s ease, border-color .14s ease;
+    font:inherit;scroll-margin-top:88px;
+  }
+  .cmd:hover{background:var(--surface-2)}
+  .cmd:target{border-color:var(--accent);animation:cmdflash 1.4s ease}
+  @keyframes cmdflash{0%,60%{background:var(--accent-soft)}100%{background:var(--surface)}}
+  @media (prefers-reduced-motion:reduce){.cmd:target{animation:none;background:var(--accent-soft)}}
+  .cmd:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .cmd:active{transform:translateY(1px)}
+  .cmd .txt{flex:1;min-width:0}
+  .cmd .name{display:block;font-family:"JetBrains Mono",monospace;font-size:.78rem;font-weight:500;color:var(--accent);margin-bottom:3px}
+  .cmd .phrase{display:block;font-size:.92rem;color:var(--ink);word-break:break-word}
+  .cmd .copyhint{flex:none;font-family:"JetBrains Mono",monospace;font-size:.72rem;font-weight:500;
+    text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);
+    padding:4px 6px;border-radius:6px;transition:color .14s ease,background .14s ease}
+  .cmd:hover .copyhint{color:var(--accent);background:var(--accent-soft)}
+  .cmd.copied .copyhint{color:var(--accent);background:var(--accent-soft)}
+
+  .block{
+    position:relative;background:var(--surface);border:1px solid var(--line);
+    border-radius:12px;padding:16px 44px 16px 16px;margin:10px 0 18px;cursor:pointer;
+    transition:background .14s ease;
+  }
+  .block:hover{background:var(--surface-2)}
+  .block:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .block pre{margin:0;white-space:pre-wrap;word-break:break-word;
+    font-family:"JetBrains Mono",monospace;font-size:.82rem;line-height:1.6;color:var(--ink)}
+  .block .badge{position:absolute;top:11px;right:11px;font-family:"JetBrains Mono",monospace;
+    font-size:.7rem;font-weight:500;text-transform:uppercase;letter-spacing:.04em;
+    color:var(--ink-soft);padding:3px 7px;border-radius:6px;transition:color .14s ease,background .14s ease}
+  .block:hover .badge{color:var(--accent);background:var(--accent-soft)}
+  .block.copied .badge{color:var(--accent);background:var(--accent-soft)}
+  .block h3{margin:0 0 8px;font-size:.86rem;font-weight:600;color:var(--ink);font-family:"Inter",sans-serif}
+
+  .reminders{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:9px}
+  .reminders li{background:var(--surface);border:1px solid var(--line);border-radius:11px;
+    padding:12px 14px;font-size:.9rem;color:var(--ink-soft)}
+  .reminders b{color:var(--ink);font-weight:600}
+  .reminders li.critical{border-left:3px solid var(--highlight);border-radius:4px 11px 11px 4px}
+  .reminders li.critical b{color:var(--highlight)}
+
+  .ctx .block{margin:12px 0 2px;background:var(--surface-2)}
+  .ctx .block:hover{background:var(--ground)}
+  .ctx .prompt-label{margin:14px 0 0;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;
+    font-weight:600;color:var(--accent-2)}
+  .ctx.key > h3{color:var(--accent-2)}
+  .block--team{border-left:3px solid var(--accent-2);border-radius:4px 12px 12px 4px}
+
+  .ctx{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;margin:12px 0}
+  .ctx > h3{margin:0 0 4px;font-size:1rem;font-weight:600;font-family:"Space Grotesk",sans-serif}
+  .ctx .ctx-sub{margin:0 0 12px;color:var(--ink-soft);font-size:.85rem}
+  ol.steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:9px}
+  ol.steps li{counter-increment:s;position:relative;padding-left:32px;font-size:.92rem;color:var(--ink)}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:21px;height:21px;
+    display:grid;place-items:center;border-radius:50%;background:var(--accent-soft);color:var(--accent);
+    font-family:"JetBrains Mono",monospace;font-size:.74rem;font-weight:600}
+  ol.steps li code{background:var(--surface-2);color:var(--ink);padding:1px 6px;border-radius:5px;font-size:.85em}
+  .ctx .heads-up{margin:10px 0 0;font-size:.84rem;color:var(--ink-soft);
+    border-top:1px solid var(--line);padding-top:10px}
+
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);
+    color:var(--ink-soft);font-size:.8rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  #toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%);
+    background:var(--ink);color:var(--ground);padding:9px 16px;border-radius:999px;
+    font-family:"JetBrains Mono",monospace;font-size:.8rem;font-weight:500;opacity:0;pointer-events:none;
+    transition:opacity .2s ease}
+  #toast.show{opacity:1}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+  .skip-link{position:absolute;left:8px;top:-48px;z-index:20;background:var(--accent);color:#fff;
+    font-family:"JetBrains Mono",monospace;font-size:.8rem;padding:8px 14px;border-radius:8px;
+    text-decoration:none;transition:top .16s ease}
+  .skip-link:focus{top:8px;outline:2px solid #fff;outline-offset:2px}
+
+  .filter-wrap{position:relative;margin:0 0 18px}
+  .filter{width:100%;font-family:"JetBrains Mono",monospace;font-size:.85rem;color:var(--ink);
+    background:var(--surface);border:1px solid var(--line);border-radius:11px;
+    padding:11px 38px 11px 14px;transition:border-color .14s ease,background .14s ease}
+  .filter::placeholder{color:var(--ink-soft)}
+  .filter:focus{outline:none;border-color:var(--accent);background:var(--accent-soft)}
+  .filter-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;
+    color:var(--ink-soft);cursor:pointer;font-size:1rem;line-height:1;padding:6px 8px;border-radius:8px}
+  .filter-clear:hover,.filter-clear:focus-visible{color:var(--accent);background:var(--accent-soft);outline:none}
+  .cmd[hidden]{display:none}
+  .group[hidden]{display:none}
+  .no-hits{display:none;color:var(--ink-soft);font-size:.9rem;padding:8px 2px}
+  .no-hits.show{display:block}
+  .nav a[aria-current="true"]{color:var(--accent);background:var(--accent-soft);border-color:var(--accent)}
+
+  .webapp-note{margin:0 0 18px;padding:14px 16px;border:1px solid var(--line);
+    border-left:3px solid var(--accent-2);background:var(--surface);border-radius:4px 12px 12px 4px;
+    font-size:.88rem;color:var(--ink-soft);display:grid;gap:6px}
+  .webapp-note strong{color:var(--accent-2);font-weight:600}
+  .webapp-note em{color:var(--ink);font-style:italic}
+  .webapp-note b{color:var(--ink);font-weight:600}
+  .webapp-note code{background:var(--surface-2);color:var(--ink);font-weight:500;padding:1px 6px;border-radius:5px}
+  .webapp-note.infobrief{border-left-color:var(--accent)}
+  .webapp-note.infobrief strong{color:var(--accent)}
+  .bundle-toolbar{display:flex;gap:8px;margin:0 0 16px}
+  .mini-btn{font-family:"JetBrains Mono",monospace;font-size:.72rem;font-weight:500;color:var(--ink-soft);
+    background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer;
+    transition:color .14s ease,background .14s ease,border-color .14s ease}
+  .mini-btn:hover,.mini-btn:focus-visible{color:var(--accent);background:var(--accent-soft);border-color:var(--accent);outline:none}
+  .bundle{border:1px solid var(--line);border-radius:12px;margin:0 0 12px;background:var(--surface)}
+  .bundle > summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;
+    padding:14px 16px;font-family:"Space Grotesk",sans-serif;font-weight:600;user-select:none}
+  .bundle > summary::-webkit-details-marker{display:none}
+  .bundle > summary::before{content:"\25B8";color:var(--accent);font-size:.8em;transition:transform .15s ease;flex:none}
+  .bundle[open] > summary::before{transform:rotate(90deg)}
+  .bundle > summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .bundle-name{color:var(--ink)}
+  .bundle-desc{font-family:"Inter",sans-serif;font-weight:400;font-size:.85rem;color:var(--ink-soft)}
+  .bundle-body{padding:0 16px 8px}
+  .block--allinone{border:1px solid var(--accent-2);border-left:3px solid var(--accent-2);
+    border-radius:4px 12px 12px 4px;background:var(--accent-2-soft)}
+  .block--allinone:hover{background:var(--accent-2-soft)}
+  .block--allinone h3{color:var(--accent-2);font-family:"Space Grotesk",sans-serif}
+  .block--allinone .badge{color:var(--accent-2)}
+  .block--allinone.copied .badge{color:var(--accent-2);background:var(--surface)}
+  .block--master{border:1px solid var(--accent);border-left:4px solid var(--accent);
+    border-radius:4px 12px 12px 4px;background:var(--accent-soft);margin:0 0 16px}
+  .block--master:hover{background:var(--accent-soft)}
+  .block--master h3{color:var(--accent);font-family:"Space Grotesk",sans-serif;margin:0 0 8px}
+  .block--master .badge{color:var(--accent)}
+  @media (prefers-reduced-motion:reduce){.bundle > summary::before{transition:none}}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#agents">Skip to commands</a>
+
+<div class="wrap">
+  <div class="topband">
+    <header class="hero">
+      <h1>Transition Interactive</h1>
+      <p class="subtitle">team commands</p>
+      <p class="lead">Command menu for triggering the 33 subagents in Claude Code. Tap any command to copy it.</p>
+      <p class="creds">Every role operates at a global professional standard — an advanced degree in its field (MBA / Master / PhD), 20+ years of seniority, domain-specific methodologies, systemic thinking, AI-native, resource-optimized, and validates everything.</p>
+    </header>
+    <div class="statbar" aria-label="Team at a glance">
+      <span class="stat key"><b>33</b> subagents</span>
+      <span class="stat"><b>1</b> Head</span>
+      <span class="stat"><b>5</b> pod leaders</span>
+      <span class="stat"><b>6</b> pods</span>
+      <span class="stat"><b>7</b> briefing bundles</span>
+      <span class="stat"><b>10</b> conditional roles</span>
+    </div>
+  </div>
+
+  <nav class="nav" aria-label="Sections">
+    <a href="#structure">Structure</a>
+    <a href="#agents">Agents</a>
+    <a href="#whole-team">Whole team</a>
+    <a href="#briefings">Briefings</a>
+    <a href="#install">Install</a>
+    <a href="#setup">Setup</a>
+  </nav>
+
+  <main id="main">
+  <div class="rule-note">
+    <strong>Golden rule:</strong> subagents are not called with a slash command. You talk to the
+    <strong>Head</strong> (the session) in natural language, naming the agent:
+    <code>Use the &lt;name&gt; subagent to &lt;task&gt;.</code>
+  </div>
+
+  <h2 id="structure">Team structure</h2>
+  <p class="section-sub">Org chart in three layers — <b style="color:var(--accent-2)">Head</b> → <b style="color:var(--accent-2)">★ pod leaders</b> → teams. Not sure who to ask? Call the Head. <b style="color:var(--accent-2)">Tap any role</b> to jump to its copy-ready command below.</p>
+  <div class="map">
+    <a class="map-head agent-link" href="#cmd-transition-interactive-head"><span class="dot"></span>Head · Product &amp; Engineering — the orchestrator</a>
+    <div class="map-rail">
+      <div class="branch">
+        <div class="branch-label"><span class="dot" style="background:var(--g-design)"></span>Creative &amp; UX</div>
+        <div class="agents"><a class="agent-link lead" href="#cmd-transition-interactive-creative-direction">transition-interactive-creative-direction</a><a class="agent-link" href="#cmd-transition-interactive-ux-architect">transition-interactive-ux-architect</a><a class="agent-link" href="#cmd-transition-interactive-ux-research">transition-interactive-ux-research</a><a class="agent-link" href="#cmd-transition-interactive-ui-designer">transition-interactive-ui-designer</a><a class="agent-link" href="#cmd-transition-interactive-motion-designer">transition-interactive-motion-designer</a><a class="agent-link cond" href="#cmd-transition-interactive-sound-designer">transition-interactive-sound-designer</a><a class="agent-link" href="#cmd-transition-interactive-design-system-engineer">transition-interactive-design-system-engineer</a></div>
+      </div>
+      <div class="branch">
+        <div class="branch-label"><span class="dot" style="background:var(--highlight)"></span>Experience / Interactive</div>
+        <div class="agents"><a class="agent-link lead" href="#cmd-transition-interactive-experience-director">transition-interactive-experience-director</a><a class="agent-link cond" href="#cmd-transition-interactive-scroll-motion">transition-interactive-scroll-motion</a><a class="agent-link cond" href="#cmd-transition-interactive-micro-interaction">transition-interactive-micro-interaction</a><a class="agent-link cond" href="#cmd-transition-interactive-interactive-dataviz">transition-interactive-interactive-dataviz</a><a class="agent-link cond" href="#cmd-transition-interactive-gamification">transition-interactive-gamification</a><a class="agent-link cond" href="#cmd-transition-interactive-dynamic-content">transition-interactive-dynamic-content</a></div>
+      </div>
+      <div class="branch">
+        <div class="branch-label"><span class="dot" style="background:var(--g-eng)"></span>Engineering</div>
+        <div class="agents"><a class="agent-link lead" href="#cmd-transition-interactive-engineering-lead">transition-interactive-engineering-lead</a><a class="agent-link" href="#cmd-transition-interactive-frontend-multistack">transition-interactive-frontend-multistack</a><a class="agent-link" href="#cmd-transition-interactive-creative-technologist">transition-interactive-creative-technologist</a><a class="agent-link cond" href="#cmd-transition-interactive-system-performance">transition-interactive-system-performance</a><a class="agent-link cond" href="#cmd-transition-interactive-3d-immersive">transition-interactive-3d-immersive</a><a class="agent-link" href="#cmd-transition-interactive-mobile-crossplatform">transition-interactive-mobile-crossplatform</a><a class="agent-link" href="#cmd-transition-interactive-backend-integration">transition-interactive-backend-integration</a><a class="agent-link cond" href="#cmd-transition-interactive-ai-engineer">transition-interactive-ai-engineer</a><a class="agent-link" href="#cmd-transition-interactive-devops-deploy">transition-interactive-devops-deploy</a></div>
+      </div>
+      <div class="branch">
+        <div class="branch-label"><span class="dot" style="background:var(--g-qa)"></span>Quality &amp; Audit</div>
+        <div class="agents"><a class="agent-link lead" href="#cmd-transition-interactive-quality-lead">transition-interactive-quality-lead</a><a class="agent-link" href="#cmd-transition-interactive-audit-code">transition-interactive-audit-code</a><a class="agent-link" href="#cmd-transition-interactive-audit-design">transition-interactive-audit-design</a><a class="agent-link" href="#cmd-transition-interactive-security-privacy">transition-interactive-security-privacy</a><a class="agent-link" href="#cmd-transition-interactive-qa-cross-browser">transition-interactive-qa-cross-browser</a><a class="agent-link cond" href="#cmd-transition-interactive-ai-security-review">transition-interactive-ai-security-review</a></div>
+      </div>
+      <div class="branch">
+        <div class="branch-label"><span class="dot" style="background:var(--g-content)"></span>Content &amp; Growth</div>
+        <div class="agents"><a class="agent-link lead" href="#cmd-transition-interactive-growth-lead">transition-interactive-growth-lead</a><a class="agent-link" href="#cmd-transition-interactive-content-seo">transition-interactive-content-seo</a><a class="agent-link" href="#cmd-transition-interactive-analytics-growth">transition-interactive-analytics-growth</a></div>
+      </div>
+      <div class="branch">
+        <div class="branch-label"><span class="dot" style="background:var(--g-util)"></span>Utility</div>
+        <div class="agents"><a class="agent-link" href="#cmd-transition-interactive-explore">transition-interactive-explore</a></div>
+      </div>
+    </div>
+    <p class="map-note"><b>★</b> pod leader — route to a leader and it coordinates its team. <b>*</b> conditional roles — instantiated only on trigger (award-winning interactivity; real-time/3D; AI in production). The Quality branch is read-only and independent: it reports to the Head, never to who produced the work.</p>
+  </div>
+
+  <h2>Real slash commands</h2>
+  <p class="section-sub">The only ones that actually exist. <code>/agents</code> confirms the 33 loaded.</p>
+  <table class="slash">
+    <tr><th>Command</th><th>What it does</th></tr>
+    <tr><td><code>/agents</code></td><td>List and manage the subagents (view, edit, create)</td></tr>
+    <tr><td><code>/hooks</code></td><td>Inspect / reload the write-scope hook</td></tr>
+    <tr><td><code>/help</code></td><td>Claude Code help</td></tr>
+  </table>
+
+  <h2 id="agents" tabindex="-1">Call one agent</h2>
+  <p class="section-sub">Ready-made phrases — tap to copy and paste into the chat.</p>
+  <div class="filter-wrap">
+    <input class="filter" id="filter" type="search" autocomplete="off" spellcheck="false"
+      placeholder="Filter 33 agents…  (press / to focus, Esc to clear)" aria-label="Filter agent commands">
+    <button class="filter-clear" id="filter-clear" type="button" aria-label="Clear filter" hidden>✕</button>
+  </div>
+  <p class="no-hits" id="no-hits">No agent matches — try another term.</p>
+
+  <div class="group">
+    <div class="group-head"><span class="chip"><span class="dot" style="background:var(--accent-2)"></span>Head · orchestrator</span><span class="group-line"></span></div>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-head</span><span class="phrase">Use the transition-interactive-head subagent to plan the pipeline for this project and route each stage to the right pod leader — I approve every gate.</span></span><span class="copyhint">copy</span></button>
+  </div>
+
+  <div class="group">
+    <div class="group-head"><span class="chip"><span class="dot" style="background:var(--g-design)"></span>Creative &amp; UX · ★ creative-direction</span><span class="group-line"></span></div>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-creative-direction</span><span class="phrase">Use the transition-interactive-creative-direction subagent to define the visual direction, brand coherence and voice &amp; tone.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-ux-architect</span><span class="phrase">Use the transition-interactive-ux-architect subagent to design the flow and information architecture.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-ux-research</span><span class="phrase">Use the transition-interactive-ux-research subagent to plan user research and synthesize findings into evidence.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-ui-designer</span><span class="phrase">Use the transition-interactive-ui-designer subagent to turn the flow into high-fidelity UI.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-motion-designer</span><span class="phrase">Use the transition-interactive-motion-designer subagent to propose transitions and animations.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-sound-designer</span><span class="phrase">Use the transition-interactive-sound-designer subagent to design the sound identity and audio feedback.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-design-system-engineer</span><span class="phrase">Use the transition-interactive-design-system-engineer subagent to build the design tokens and components.</span></span><span class="copyhint">copy</span></button>
+  </div>
+
+  <div class="group">
+    <div class="group-head"><span class="chip"><span class="dot" style="background:var(--highlight)"></span>Experience / Interactive · ★ experience-director</span><span class="group-line"></span></div>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-experience-director</span><span class="phrase">Use the transition-interactive-experience-director subagent to define the interactive concept and the "feel" (Lusion / Unseen / Apple / Rive level) before implementation.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-scroll-motion</span><span class="phrase">Use the transition-interactive-scroll-motion subagent to build scrollytelling, parallax and scroll-spy.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-micro-interaction</span><span class="phrase">Use the transition-interactive-micro-interaction subagent for hover states, 3D flip cards, custom cursor and magnetic buttons.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-interactive-dataviz</span><span class="phrase">Use the transition-interactive-interactive-dataviz subagent for image hotspots, interactive maps and before/after comparison sliders.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-gamification</span><span class="phrase">Use the transition-interactive-gamification subagent for quizzes, real-time calculators/simulators and drag-and-drop.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-dynamic-content</span><span class="phrase">Use the transition-interactive-dynamic-content subagent for real-time faceted filters and infinite scroll vs. load-more.</span></span><span class="copyhint">copy</span></button>
+  </div>
+
+  <div class="group">
+    <div class="group-head"><span class="chip"><span class="dot" style="background:var(--g-eng)"></span>Engineering · ★ engineering-lead</span><span class="group-line"></span></div>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-engineering-lead</span><span class="phrase">Use the transition-interactive-engineering-lead subagent to turn the approved design into a technical plan and coordinate the engineering pod.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-frontend-multistack</span><span class="phrase">Use the transition-interactive-frontend-multistack subagent to implement the interface in code.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-creative-technologist</span><span class="phrase">Use the transition-interactive-creative-technologist subagent to prototype the idea and prove technical feasibility.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-system-performance</span><span class="phrase">Use the transition-interactive-system-performance subagent to optimize rendering and Core Web Vitals.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-3d-immersive</span><span class="phrase">Use the transition-interactive-3d-immersive subagent to build the 3D/WebGL/XR immersive layer.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-mobile-crossplatform</span><span class="phrase">Use the transition-interactive-mobile-crossplatform subagent for the mobile delivery.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-backend-integration</span><span class="phrase">Use the transition-interactive-backend-integration subagent for the API and data contract.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-ai-engineer</span><span class="phrase">Use the transition-interactive-ai-engineer subagent to build the AI/ML feature with evals and guardrails.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-devops-deploy</span><span class="phrase">Use the transition-interactive-devops-deploy subagent for the CI/CD pipeline and deploy.</span></span><span class="copyhint">copy</span></button>
+  </div>
+
+  <div class="group">
+    <div class="group-head"><span class="chip"><span class="dot" style="background:var(--g-qa)"></span>Quality &amp; Audit · ★ quality-lead</span><span class="group-line"></span></div>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-quality-lead</span><span class="phrase">Use the transition-interactive-quality-lead subagent to consolidate the audit pod's findings into one gate verdict (approved / blocked).</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-audit-code</span><span class="phrase">Use the transition-interactive-audit-code subagent to audit the code.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-audit-design</span><span class="phrase">Use the transition-interactive-audit-design subagent to audit accessibility and usability.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-security-privacy</span><span class="phrase">Use the transition-interactive-security-privacy subagent to review security and privacy.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-qa-cross-browser</span><span class="phrase">Use the transition-interactive-qa-cross-browser subagent to test responsiveness and cross-browser.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-ai-security-review</span><span class="phrase">Use the transition-interactive-ai-security-review subagent to red-team AI features.</span></span><span class="copyhint">copy</span></button>
+  </div>
+
+  <div class="group">
+    <div class="group-head"><span class="chip"><span class="dot" style="background:var(--g-content)"></span>Content &amp; Growth · ★ growth-lead</span><span class="group-line"></span></div>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-growth-lead</span><span class="phrase">Use the transition-interactive-growth-lead subagent to define the success metric per page and coordinate content/SEO and analytics.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-content-seo</span><span class="phrase">Use the transition-interactive-content-seo subagent to write copy and metatags.</span></span><span class="copyhint">copy</span></button>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-analytics-growth</span><span class="phrase">Use the transition-interactive-analytics-growth subagent to define and read the success metrics.</span></span><span class="copyhint">copy</span></button>
+  </div>
+
+  <div class="group">
+    <div class="group-head"><span class="chip"><span class="dot" style="background:var(--g-util)"></span>Utility</span><span class="group-line"></span></div>
+    <button class="cmd"><span class="txt"><span class="name">transition-interactive-explore</span><span class="phrase">Use the transition-interactive-explore subagent to map this project's file and directory structure.</span></span><span class="copyhint">copy</span></button>
+  </div>
+
+  <h2 id="whole-team">Call the whole team</h2>
+  <p class="section-sub">Don't fire the 33 in parallel — the value is in the order of the gates. One command:</p>
+  <div class="block block--team" data-copy="Head: run the full pipeline on this project — discovery (transition-interactive-explore, transition-interactive-ux-architect), design (transition-interactive-creative-direction, transition-interactive-ui-designer, transition-interactive-motion-designer, transition-interactive-design-system-engineer), implementation (transition-interactive-frontend-multistack, transition-interactive-backend-integration), audit (transition-interactive-audit-design, transition-interactive-audit-code, transition-interactive-qa-cross-browser, transition-interactive-security-privacy) and, if approved, deploy (transition-interactive-devops-deploy). Record trade-offs in DECISIONS.md and don't advance any gate without my approval.">
+    <span class="badge">copy</span>
+    <pre>Head: run the full pipeline on this project — discovery (transition-interactive-explore,
+transition-interactive-ux-architect), design (transition-interactive-creative-direction, transition-interactive-ui-designer,
+transition-interactive-motion-designer, transition-interactive-design-system-engineer), implementation
+(transition-interactive-frontend-multistack, transition-interactive-backend-integration), audit
+(transition-interactive-audit-design, transition-interactive-audit-code, transition-interactive-qa-cross-browser,
+transition-interactive-security-privacy) and, if approved, deploy (transition-interactive-devops-deploy).
+Record trade-offs in DECISIONS.md and don't advance any gate without my approval.</pre>
+  </div>
+
+  <h2 id="briefings">Briefings by goal</h2>
+  <p class="section-sub">Ready starting points. Tap to copy and fill in the [brackets].</p>
+  <div class="webapp-note">
+    <strong>Web or App?</strong> Ask <em>“where does the user open this?”</em>
+    <span><b>Browser / has a URL</b> (site, web app, dashboard) → bundles <b>A–F</b>.</span>
+    <span><b>Installed from the App Store / Play</b>, uses device features (push, offline, camera, biometrics, in-app purchase) → bundle <b>G · Apps</b>.</span>
+    <span><b>Shared either way:</b> A · Start &amp; Discovery, F · Grow &amp; Measure and the research/brand parts of B — run these once, then branch to the web bundles or to G.</span>
+  </div>
+  <div class="webapp-note infobrief">
+    <strong>What to give a briefing</strong> — fill in the <code>[brackets]</code>. You don't need everything up front: the Head asks for what's missing before it runs.
+    <span><b>Always:</b> the target (site/app <b>URL</b>, file/repo path, or just “this repo” if the session is already open on it), the goal, the audience, and constraints (deadline, budget, stack).</span>
+    <span><b>By type:</b> audit / lean / ship → the <b>link or repo</b> + which browsers/devices matter · modernize / UI / interactive → <b>references &amp; tone</b> (links you like, adjectives) · match look &amp; feel → <b>the image</b> · backend / AI → what it does + data sources + existing auth · content / SEO / metrics → keywords + conversion goal · Apps (G) → <b>platforms</b> (iOS/Android) + native vs cross-platform.</span>
+    <span><b>Where it lives:</b> has a URL → paste the link · open in Claude Code → say “this repo”, no link needed · a Claude Design canvas → export PNG/PDF into <code>/design</code>.</span>
+  </div>
+
+  <div class="block block--master" data-copy="Head: run the entire pipeline end to end, in gate order, and don't advance any gate without my approval. A · Start & Discovery — transition-interactive-explore + transition-interactive-ux-research + transition-interactive-ux-architect (brief, IA, evidence). B · Design & UX — transition-interactive-experience-director + transition-interactive-creative-direction + transition-interactive-ui-designer + transition-interactive-design-system-engineer (vision, flow, visual system, tokens). C · Interaction & Motion — transition-interactive-motion-designer + transition-interactive-micro-interaction + transition-interactive-scroll-motion (justified motion, prefers-reduced-motion). D · Build & Integrate — transition-interactive-engineering-lead + transition-interactive-frontend-multistack + transition-interactive-backend-integration + transition-interactive-ai-engineer + transition-interactive-system-performance. E · Quality & Launch — transition-interactive-quality-lead consolidates the audit pod (audit-code, audit-design, security-privacy, qa-cross-browser, system-performance) into ONE verdict; only if APPROVED, transition-interactive-devops-deploy ships with tested rollback. F · Grow & Measure — transition-interactive-growth-lead + transition-interactive-content-seo + transition-interactive-analytics-growth. G · Apps — run this bundle ONLY if the deliverable is a mobile app (transition-interactive-mobile-crossplatform leads the app lifecycle to the store). Record every trade-off in DECISIONS.md. Never skip the audit pod before production.">
+    <span class="badge">copy all</span>
+    <h3>▶▶ Run everything A→G <span style="color:var(--highlight)">(full pipeline, one copy)</span></h3>
+    <pre>Head: run the entire pipeline end to end, in gate order; don't advance any
+gate without my approval. A Discovery (explore + ux-research + ux-architect) →
+B Design & UX (experience-director + creative-direction + ui-designer +
+design-system-engineer) → C Interaction & Motion (motion + micro-interaction +
+scroll-motion, prefers-reduced-motion) → D Build & Integrate (engineering-lead +
+frontend + backend + ai-engineer + system-performance) → E Quality & Launch
+(quality-lead consolidates the audit pod → one verdict → devops-deploy if
+APPROVED, tested rollback) → F Grow & Measure (growth-lead + content-seo +
+analytics-growth). G Apps only if the deliverable is a mobile app
+(mobile-crossplatform leads the app lifecycle to the store). Trade-offs in
+DECISIONS.md; never skip the audit pod before production.</pre>
+  </div>
+
+  <div class="bundle-toolbar">
+    <button type="button" id="expand-all" class="mini-btn">Expand all</button>
+    <button type="button" id="collapse-all" class="mini-btn">Collapse all</button>
+  </div>
+  <details class="bundle">
+    <summary><span class="bundle-name">A · Start &amp; Discovery</span><span class="bundle-desc">Frame the problem before you build.</span></summary>
+    <div class="bundle-body">
+      <div class="block block--allinone" data-copy="Head: run the full Start & Discovery phase on this project. transition-interactive-explore maps the codebase; transition-interactive-ux-research plans and synthesizes user evidence; transition-interactive-ux-architect turns it into information architecture, flows and navigation; transition-interactive-creative-technologist runs a feasibility spike on any risky idea. Return the brief, the IA and the evidence before any design or build; record trade-offs in DECISIONS.md; I approve before advancing.">
+        <span class="badge">copy all</span>
+        <h3>▶ All-in-one — run this whole bundle</h3>
+        <pre>Head: run the full Start & Discovery phase on this project. transition-interactive-explore maps the codebase; transition-interactive-ux-research plans and synthesizes user evidence; transition-interactive-ux-architect turns it into information architecture, flows and navigation; transition-interactive-creative-technologist runs a feasibility spike on any risky idea. Return the brief, the IA and the evidence before any design or build; record trade-offs in DECISIONS.md; I approve before advancing.</pre>
+      </div>
+    </div>
+  </details>
+
+  <details class="bundle">
+      <summary><span class="bundle-name">B · Design &amp; UX</span><span class="bundle-desc">Look, flow, coherence and the design system.</span></summary>
+      <div class="bundle-body">
+      <div class="block block--allinone" data-copy="Head: run the full Design & UX phase. transition-interactive-experience-director + transition-interactive-creative-direction set the vision and reference bar; transition-interactive-ux-architect fixes flow and hierarchy; transition-interactive-ui-designer builds the visual system (color, type scale, spacing, states); transition-interactive-design-system-engineer encodes versioned tokens + components; transition-interactive-frontend-multistack implements a responsive grid 320-1920px. Gate: transition-interactive-audit-design. Spec in /design and /docs first; I approve before build; record trade-offs in DECISIONS.md.">
+        <span class="badge">copy all</span>
+        <h3>▶ All-in-one — run this whole bundle</h3>
+        <pre>Head: run the full Design & UX phase. transition-interactive-experience-director + transition-interactive-creative-direction set the vision and reference bar; transition-interactive-ux-architect fixes flow and hierarchy; transition-interactive-ui-designer builds the visual system (color, type scale, spacing, states); transition-interactive-design-system-engineer encodes versioned tokens + components; transition-interactive-frontend-multistack implements a responsive grid 320-1920px. Gate: transition-interactive-audit-design. Spec in /design and /docs first; I approve before build; record trade-offs in DECISIONS.md.</pre>
+      </div>
+    <div class="block" data-copy="Head: I want a sophisticated, interactive UX/UI experience for [landing/app/portfolio]. Goal: [what the user should feel/do]. Audience: [who]. References/tone: [links or adjectives]. Run design→implementation focused on interaction: transition-interactive-ux-architect (navigation and flow), transition-interactive-creative-direction (aesthetic + typography), transition-interactive-ui-designer (high fidelity, hierarchy and legibility, empty/error/loading states), transition-interactive-motion-designer (transitions and micro-interactions with prefers-reduced-motion), transition-interactive-design-system-engineer (tokens and components), transition-interactive-frontend-multistack (responsive code 320–1920px). Mandatory gate: transition-interactive-audit-design + transition-interactive-qa-cross-browser + transition-interactive-system-performance. Record trade-offs in DECISIONS.md and don't advance without my approval.">
+      <span class="badge">copy</span>
+      <h3>Sophisticated, interactive UX/UI experience</h3>
+      <pre>Head: I want a sophisticated, interactive UX/UI experience for
+[landing/app/portfolio]. Goal: [what the user should feel/do]. Audience: [who].
+References/tone: [links or adjectives]. Run design→implementation focused on
+interaction: transition-interactive-ux-architect (navigation), transition-interactive-creative-direction
+(aesthetic + typography), transition-interactive-ui-designer (high fidelity, legibility, states),
+transition-interactive-motion-designer (transitions, prefers-reduced-motion),
+transition-interactive-design-system-engineer (tokens), transition-interactive-frontend-multistack
+(responsive code 320–1920px). Gate: transition-interactive-audit-design +
+transition-interactive-qa-cross-browser + transition-interactive-system-performance.</pre>
+    </div>
+    <div class="block" data-copy="Head: optimize the UI design and elevate the UX to memorable. Route it as: transition-interactive-experience-director + transition-interactive-creative-direction lead the vision; transition-interactive-ux-architect (flow, remove redundancy, information hierarchy); transition-interactive-ui-designer (visual coherence — color system, sizing scale, type hierarchy, component states); transition-interactive-design-system-engineer (versioned design tokens + components so coherence is enforced, not manual); transition-interactive-frontend-multistack (responsive grid that works on every screen, 320→1920px); and the Experience pod for a memorable, justified interactive layer — transition-interactive-motion-designer + transition-interactive-micro-interaction (feel, states, transitions) and transition-interactive-scroll-motion (scroll narrative/parallax) where it communicates something, always respecting prefers-reduced-motion. Mandatory gate before anything ships: transition-interactive-audit-design (WCAG 2.2 AA, contrast, hierarchy) + transition-interactive-qa-cross-browser + transition-interactive-system-performance. Propose everything as a spec in /design and /docs first; record trade-offs in DECISIONS.md; I approve before it's applied.">
+      <span class="badge">copy</span>
+      <h3>Optimize UI · coherence, refined UX &amp; memorable interaction</h3>
+      <pre>Head: optimize the UI and elevate the UX to memorable.
+transition-interactive-experience-director + transition-interactive-creative-direction
+lead the vision; transition-interactive-ux-architect (flow, kill redundancy,
+hierarchy); transition-interactive-ui-designer (coherence — color, sizing, type
+scale, states); transition-interactive-design-system-engineer (tokens +
+components so coherence is enforced); transition-interactive-frontend-multistack
+(responsive grid, 320→1920px); Experience pod for a justified interactive
+layer — transition-interactive-motion-designer + transition-interactive-micro-interaction
++ transition-interactive-scroll-motion, always respecting prefers-reduced-motion.
+Gate: transition-interactive-audit-design + transition-interactive-qa-cross-browser
++ transition-interactive-system-performance. Spec in /design and /docs first;
+trade-offs in DECISIONS.md; I approve before it's applied.</pre>
+    </div>
+    <div class="block" data-copy="Head: modernize this dated site into a distinctive, contemporary experience. Route it as: transition-interactive-experience-director + transition-interactive-creative-direction set the new aesthetic and reference bar (Lusion / Unseen / Apple / Rive level, tasteful not trendy); transition-interactive-ux-architect fixes flow and removes dated patterns; transition-interactive-ui-designer rebuilds the visual system (color, type scale, spacing, states); transition-interactive-motion-designer + transition-interactive-micro-interaction add feel and justified motion; transition-interactive-scroll-motion adds a scroll narrative where it communicates something — always respecting prefers-reduced-motion; transition-interactive-frontend-multistack implements it on a responsive grid (320→1920px). Gate before ship: transition-interactive-audit-design + transition-interactive-qa-cross-browser + transition-interactive-system-performance. Spec in /design and /docs first; I approve before it's applied; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>Modernize a dated site <span style="color:var(--accent-2)">(modern)</span></h3>
+      <pre>Head: modernize this dated site into a distinctive experience.
+transition-interactive-experience-director + transition-interactive-creative-direction
+set the aesthetic + reference bar; transition-interactive-ux-architect fixes flow;
+transition-interactive-ui-designer rebuilds the visual system (color, type,
+spacing, states); transition-interactive-motion-designer + transition-interactive-micro-interaction
++ transition-interactive-scroll-motion add justified motion (respect
+prefers-reduced-motion); transition-interactive-frontend-multistack implements a
+responsive grid 320→1920px. Gate: transition-interactive-audit-design +
+transition-interactive-qa-cross-browser + transition-interactive-system-performance.
+Spec first in /design and /docs; I approve before applying.</pre>
+    </div>
+    <div class="block" data-copy="Head: make the navigation and menu fully adaptive to every screen. Route it as: transition-interactive-ux-architect picks the right nav pattern per breakpoint (full bar on desktop, condensed/scrollable or hamburger + drawer/off-canvas on mobile, and what to prioritize/collapse); transition-interactive-ui-designer designs the states (default/hover/active/focus/open, current-section indicator); transition-interactive-frontend-multistack implements a responsive, accessible nav — keyboard operable, focus trap in the drawer, aria-expanded/aria-current, sticky where useful, no horizontal overflow at 320px, safe-area aware. transition-interactive-qa-cross-browser verifies it on mobile, tablet portrait + landscape and desktop, iOS + Android, all browsers. transition-interactive-audit-design checks a11y. I approve before it's applied; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>Adaptive navigation &amp; menu for every screen</h3>
+      <pre>Head: make the navigation and menu adaptive to every screen.
+transition-interactive-ux-architect picks the pattern per breakpoint (bar on
+desktop, hamburger + drawer on mobile, what to collapse); transition-interactive-ui-designer
+designs the states + current-section indicator; transition-interactive-frontend-multistack
+implements it accessible (keyboard, focus trap, aria-expanded/aria-current,
+sticky, no 320px overflow, safe-area). transition-interactive-qa-cross-browser
+verifies mobile / tablet portrait+landscape / desktop, iOS + Android, all
+browsers; transition-interactive-audit-design checks a11y.</pre>
+    </div>
+    <div class="block" data-copy="Head: I want the UI design to follow the look &amp; feel of a reference image I'll provide. FIRST, ask me to share the reference image (and any link/brand notes) before doing anything. Once I share it, route it as: transition-interactive-creative-direction reads the image and extracts the visual language — palette, typography feel, spacing/density, mood, shape language — and writes it as a spec; transition-interactive-ui-designer turns that into a concrete UI (hierarchy, components, states); transition-interactive-design-system-engineer encodes it as versioned design tokens + components so it's coherent everywhere; transition-interactive-frontend-multistack implements it responsively (320→1920px). Gate: transition-interactive-audit-design (contrast/hierarchy) + transition-interactive-qa-cross-browser. Spec in /design and /docs first; I approve before it's applied. Do not proceed until I've given you the image.">
+      <span class="badge">copy</span>
+      <h3>Match the look &amp; feel of a reference image <span style="color:var(--accent-2)">(asks you for the image)</span></h3>
+      <pre>Head: make the UI follow the look &amp; feel of a reference image I'll provide.
+FIRST ask me to share the reference image (+ any brand notes) before doing
+anything. Then: transition-interactive-creative-direction extracts the visual
+language (palette, type feel, spacing, mood, shape) as a spec;
+transition-interactive-ui-designer turns it into concrete UI;
+transition-interactive-design-system-engineer encodes it as tokens + components;
+transition-interactive-frontend-multistack implements responsively (320→1920px).
+Gate: transition-interactive-audit-design + transition-interactive-qa-cross-browser.
+Spec first in /design and /docs; I approve before applying. Do not proceed
+until I've given you the image.</pre>
+    </div>
+    <div class="block" data-copy="Head: create or consolidate a design system for [product]. Route it as: transition-interactive-creative-direction sets the visual principles; transition-interactive-ui-designer defines the component library and states; transition-interactive-design-system-engineer encodes it as versioned design tokens (color, type scale, spacing, radius, motion) and coded components (Storybook) so coherence is enforced, not manual; transition-interactive-frontend-multistack adopts it. Gate: transition-interactive-audit-design. Spec in /design and /docs; I approve before rollout; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>Create / consolidate a design system</h3>
+      <pre>Head: create/consolidate a design system for [product].
+transition-interactive-creative-direction sets the principles;
+transition-interactive-ui-designer defines the component library + states;
+transition-interactive-design-system-engineer encodes versioned tokens +
+coded components (Storybook) so coherence is enforced; transition-interactive-frontend-multistack
+adopts it. Gate: transition-interactive-audit-design.</pre>
+    </div>
+      </div>
+  </details>
+
+  <details class="bundle">
+      <summary><span class="bundle-name">C · Interaction &amp; Motion</span><span class="bundle-desc">The justified experiential layer.</span></summary>
+      <div class="bundle-body">
+      <div class="block block--allinone" data-copy="Head: run the full Interaction & Motion layer. transition-interactive-experience-director defines which interactions serve the content; then transition-interactive-motion-designer, transition-interactive-micro-interaction and transition-interactive-scroll-motion implement them (add transition-interactive-3d-immersive or transition-interactive-sound-designer only if the product needs them); transition-interactive-frontend-multistack integrates. Every effect respects prefers-reduced-motion and has a keyboard/screen-reader equivalent. Gate: transition-interactive-audit-design + transition-interactive-qa-cross-browser + transition-interactive-system-performance. Prototype first; I approve.">
+        <span class="badge">copy all</span>
+        <h3>▶ All-in-one — run this whole bundle</h3>
+        <pre>Head: run the full Interaction & Motion layer. transition-interactive-experience-director defines which interactions serve the content; then transition-interactive-motion-designer, transition-interactive-micro-interaction and transition-interactive-scroll-motion implement them (add transition-interactive-3d-immersive or transition-interactive-sound-designer only if the product needs them); transition-interactive-frontend-multistack integrates. Every effect respects prefers-reduced-motion and has a keyboard/screen-reader equivalent. Gate: transition-interactive-audit-design + transition-interactive-qa-cross-browser + transition-interactive-system-performance. Prototype first; I approve.</pre>
+      </div>
+    <div class="block" data-copy="Head: add a memorable interactive experience to [section/page]. Route it as: transition-interactive-experience-director defines the concept and which interaction actually serves the content (not decoration), then routes to the right specialist — transition-interactive-scroll-motion (scrollytelling / parallax / scroll-spy), transition-interactive-micro-interaction (hover, 3D flip cards, cursor, magnetic buttons), transition-interactive-interactive-dataviz (image hotspots, interactive maps, before/after sliders), transition-interactive-gamification (quiz, real-time calculator/simulator, drag-and-drop) or transition-interactive-dynamic-content (real-time faceted filters, infinite scroll). transition-interactive-frontend-multistack integrates it; every interaction must respect prefers-reduced-motion and have a keyboard/screen-reader equivalent. Gate: transition-interactive-audit-design + transition-interactive-qa-cross-browser + transition-interactive-system-performance. Prototype first; I approve before it lands.">
+      <span class="badge">copy</span>
+      <h3>Add a memorable interactive experience <span style="color:var(--accent-2)">(experience pod)</span></h3>
+      <pre>Head: add a memorable interactive experience to [section/page].
+transition-interactive-experience-director defines the concept + which
+interaction serves the content, then routes to the specialist —
+transition-interactive-scroll-motion, transition-interactive-micro-interaction,
+transition-interactive-interactive-dataviz, transition-interactive-gamification or
+transition-interactive-dynamic-content. transition-interactive-frontend-multistack
+integrates; every interaction respects prefers-reduced-motion + has a
+keyboard/SR equivalent. Gate: transition-interactive-audit-design +
+transition-interactive-qa-cross-browser + transition-interactive-system-performance.
+Prototype first; I approve before it lands.</pre>
+    </div>
+    <div class="block" data-copy="Head: implement animations, effects and transitions on [page/section]. Route it as: transition-interactive-motion-designer choreographs the motion (easing, timing, the moment of each transition — motion only where it communicates something); transition-interactive-micro-interaction builds the hover/press/focus states, flip cards, cursor and magnetic effects; transition-interactive-scroll-motion adds scroll-driven transitions (reveal, parallax) where they serve the narrative; transition-interactive-frontend-multistack implements them with compositor-only properties (transform/opacity), and transition-interactive-system-performance keeps them at 60fps within budget. Every animation MUST respect prefers-reduced-motion (a full static fallback) and never block reading or input. Gate: transition-interactive-audit-design + transition-interactive-qa-cross-browser. Prototype first; I approve before it lands; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>Implement animations, effects &amp; transitions</h3>
+      <pre>Head: implement animations, effects and transitions on [page/section].
+transition-interactive-motion-designer choreographs (easing, timing, justified
+motion); transition-interactive-micro-interaction builds hover/press/focus,
+flip cards, cursor/magnetic; transition-interactive-scroll-motion adds
+scroll-driven reveals/parallax; transition-interactive-frontend-multistack
+implements with transform/opacity only; transition-interactive-system-performance
+keeps 60fps. Every animation respects prefers-reduced-motion (static fallback).
+Gate: transition-interactive-audit-design + transition-interactive-qa-cross-browser.
+Prototype first; I approve before it lands.</pre>
+    </div>
+    <div class="block" data-copy="Head: build a 3D / WebGL / immersive experience for [section]. Route it as: transition-interactive-experience-director sets the concept and reference bar; transition-interactive-3d-immersive builds the scene/shaders/asset pipeline (Three.js/WebGL/WebGPU, glTF, LOD) and XR if needed; transition-interactive-system-performance holds a frame/memory budget and tests on low-end GPUs. It must respect prefers-reduced-motion and degrade gracefully where 3D isn't supported. Gate: transition-interactive-audit-design + transition-interactive-qa-cross-browser + transition-interactive-system-performance. Conditional role — only when 3D genuinely serves the product. Prototype first; I approve; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>3D / WebGL / immersive experience <span style="color:var(--highlight)">(conditional)</span></h3>
+      <pre>Head: build a 3D / WebGL / immersive experience for [section].
+transition-interactive-experience-director sets the concept; transition-interactive-3d-immersive
+builds scene/shaders/asset pipeline (Three.js/WebGL, glTF, LOD) + XR;
+transition-interactive-system-performance holds a frame/memory budget, tests
+low-end GPUs. Respect prefers-reduced-motion + graceful degradation. Gate:
+audit-design + qa-cross-browser + system-performance. Prototype first.</pre>
+    </div>
+    <div class="block" data-copy="Head: add a sound / audio layer to [experience]. Route it as: transition-interactive-sound-designer designs the sound identity and auditory feedback (justified sound — communicates state or reinforces brand); transition-interactive-motion-designer syncs audio to motion; transition-interactive-frontend-multistack integrates it via Web Audio with a muted-by-default, user-controlled policy (never intrusive autoplay) and a visual fallback so nothing depends on sound. Respect prefers-reduced-motion / media preferences. Gate: transition-interactive-audit-design + transition-interactive-qa-cross-browser. Conditional — only when sound is genuinely part of the experience. Prototype first; I approve; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>Sound / audio experience <span style="color:var(--highlight)">(conditional)</span></h3>
+      <pre>Head: add a sound / audio layer to [experience].
+transition-interactive-sound-designer designs the sound identity + auditory
+feedback; transition-interactive-motion-designer syncs audio to motion;
+transition-interactive-frontend-multistack integrates via Web Audio, muted by
+default + user-controlled (no intrusive autoplay), with a visual fallback.
+Respect prefers-reduced-motion. Gate: transition-interactive-audit-design +
+transition-interactive-qa-cross-browser. Conditional — only when sound genuinely
+serves the experience. Prototype first.</pre>
+    </div>
+      </div>
+  </details>
+
+  <details class="bundle">
+      <summary><span class="bundle-name">D · Build &amp; Integrate</span><span class="bundle-desc">Turn the spec into a working, connected, fast product.</span></summary>
+      <div class="bundle-body">
+      <div class="block block--allinone" data-copy="Head: run the full Build & Integrate phase. transition-interactive-engineering-lead coordinates; transition-interactive-frontend-multistack builds the UI; transition-interactive-backend-integration builds the API, auth and data contract; transition-interactive-ai-engineer adds any AI feature with guardrails; transition-interactive-system-performance keeps it fast and lean. No secrets in the diff; design for failure first. Gate: transition-interactive-audit-code + transition-interactive-security-privacy. I approve the stack; record trade-offs in DECISIONS.md.">
+        <span class="badge">copy all</span>
+        <h3>▶ All-in-one — run this whole bundle</h3>
+        <pre>Head: run the full Build & Integrate phase. transition-interactive-engineering-lead coordinates; transition-interactive-frontend-multistack builds the UI; transition-interactive-backend-integration builds the API, auth and data contract; transition-interactive-ai-engineer adds any AI feature with guardrails; transition-interactive-system-performance keeps it fast and lean. No secrets in the diff; design for failure first. Gate: transition-interactive-audit-code + transition-interactive-security-privacy. I approve the stack; record trade-offs in DECISIONS.md.</pre>
+      </div>
+    <div class="block" data-copy="Head: make this website fast and lightweight without changing what it does. Route it as: transition-interactive-system-performance leads — measure first (bundle/asset weight, Core Web Vitals LCP/CLS/INP, render path, render-blocking resources, font loading) and set a budget; transition-interactive-frontend-multistack trims dead CSS/JS, lazy-loads and code-splits, and fixes the render-blocking/font issues; transition-interactive-design-system-engineer removes duplicate tokens/components; transition-interactive-explore maps unused files/assets/dependencies to prune from the repo. Verify with transition-interactive-qa-cross-browser that nothing broke visually across sizes. Show before/after metrics. Propose the cleanup as a diff; delete nothing without my approval; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>Make it fast &amp; lightweight <span style="color:var(--accent-2)">(lean)</span></h3>
+      <pre>Head: make this site fast and lightweight, same behavior.
+transition-interactive-system-performance leads — measure first (asset weight,
+LCP/CLS/INP, render path, fonts) and set a budget; transition-interactive-frontend-multistack
+trims dead CSS/JS, lazy-loads, code-splits; transition-interactive-design-system-engineer
+removes duplicate tokens/components; transition-interactive-explore maps unused
+files/deps to prune. transition-interactive-qa-cross-browser confirms nothing
+broke. Show before/after metrics; cleanup as a diff; delete nothing without
+my approval.</pre>
+    </div>
+    <div class="block" data-copy="Head: build/integrate the backend and data contract for [feature]. Route it as: transition-interactive-engineering-lead coordinates; transition-interactive-backend-integration designs the API (OpenAPI contract), data model, authentication and error/failure paths (design for failure before the happy path), with no secrets in the diff. Gate: transition-interactive-audit-code + transition-interactive-security-privacy before anything ships. Record trade-offs in DECISIONS.md; I approve the stack and the data-usage decisions.">
+      <span class="badge">copy</span>
+      <h3>Backend, API &amp; data contract</h3>
+      <pre>Head: build/integrate the backend and data contract for [feature].
+transition-interactive-engineering-lead coordinates; transition-interactive-backend-integration
+designs the API (OpenAPI), data model, auth and failure paths, no secrets in
+the diff. Gate: transition-interactive-audit-code + transition-interactive-security-privacy.
+I approve the stack and data-usage decisions.</pre>
+    </div>
+    <div class="block" data-copy="Head: build an AI feature for [use case] measurably and safely. Route it as: transition-interactive-ai-engineer builds it — model/API integration, prompt/RAG, an eval set with metrics, cost/latency control, a deterministic fallback and guardrails (design for hallucination and failure first). Then the audit pod: transition-interactive-ai-security-review red-teams prompt/output and data leakage, and transition-interactive-security-privacy reviews personal-data use. Report the measured error rate and limits honestly (no 'magic'). Gate before ship: their verdict. I approve the build/buy/borrow decision on using AI; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>Build an AI feature <span style="color:var(--accent-2)">(with guardrails)</span></h3>
+      <pre>Head: build an AI feature for [use case], measurable and safe.
+transition-interactive-ai-engineer builds it (model/API, prompt/RAG, eval set,
+cost/latency, deterministic fallback, guardrails). Then transition-interactive-ai-security-review
+red-teams prompt/output/leakage and transition-interactive-security-privacy
+reviews personal-data use. Report measured error rate + limits honestly.
+Gate: their verdict. I approve using AI at all.</pre>
+    </div>
+    <div class="block" data-copy="Head: deliver [feature/app] on mobile / cross-platform. Route it as: transition-interactive-engineering-lead coordinates; transition-interactive-mobile-crossplatform handles native (Swift/Kotlin) or cross-platform (React Native/Flutter) — lifecycle, permissions, push, offline. Gate: transition-interactive-qa-cross-browser (device matrix incl. iOS + Android, orientation, safe-area/notch) + transition-interactive-audit-code before ship. Use this when the web doesn't resolve it; record trade-offs in DECISIONS.md; I approve the platform decision.">
+      <span class="badge">copy</span>
+      <h3>Mobile / cross-platform delivery</h3>
+      <pre>Head: deliver [feature/app] on mobile / cross-platform.
+transition-interactive-engineering-lead coordinates; transition-interactive-mobile-crossplatform
+handles native (Swift/Kotlin) or cross-platform (React Native/Flutter) —
+lifecycle, permissions, push, offline. Gate: transition-interactive-qa-cross-browser
+(iOS + Android, orientation, safe-area) + transition-interactive-audit-code.</pre>
+    </div>
+    <div class="block" data-copy="Head: plan a new app for [goal / platforms]. Route it as: transition-interactive-head frames it; transition-interactive-ux-architect maps the information architecture, core flows and navigation model; transition-interactive-engineering-lead + transition-interactive-mobile-crossplatform decide native (Swift/Kotlin) vs cross-platform (React Native/Flutter) with the trade-off named, and the data/state architecture. Return the plan (platform decision, architecture, milestones) before building; I approve; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>New app · concept, IA &amp; architecture</h3>
+      <pre>Head: plan a new app for [goal / platforms].
+transition-interactive-ux-architect maps IA, core flows, navigation model; transition-interactive-engineering-lead
++ transition-interactive-mobile-crossplatform decide native vs cross-platform (trade-off named)
+and the data/state architecture. Plan before building; I approve.</pre>
+    </div>
+    <div class="block" data-copy="Head: decide native vs cross-platform for [app]. Route it to transition-interactive-creative-technologist for a timeboxed spike + transition-interactive-mobile-crossplatform and transition-interactive-engineering-lead for the assessment: performance needs, team skills, native-API access, time-to-market and long-term cost. Return a clear recommendation (native / React Native / Flutter) with the trade-off. I decide; record it in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>Native vs cross-platform · decision spike</h3>
+      <pre>Head: decide native vs cross-platform for [app].
+transition-interactive-creative-technologist runs a timeboxed spike; transition-interactive-mobile-crossplatform +
+transition-interactive-engineering-lead assess perf, native APIs, time-to-market, cost. Clear
+recommendation + trade-off; I decide.</pre>
+    </div>
+    <div class="block" data-copy="Head: design the app UI/UX to feel native on each platform. Route it as: transition-interactive-ux-architect (mobile-first flows, thumb reach, navigation patterns — tabs/stack/drawer); transition-interactive-creative-direction + transition-interactive-ui-designer (visual system respecting iOS Human Interface Guidelines and Android Material, states, empty/error/loading); transition-interactive-design-system-engineer (app design tokens + components shared across screens). Gate: transition-interactive-audit-design. Spec in /design and /docs first; I approve before build.">
+      <span class="badge">copy</span>
+      <h3>App UI/UX · platform conventions &amp; design system</h3>
+      <pre>Head: design the app UI/UX to feel native per platform.
+transition-interactive-ux-architect (mobile-first flows, navigation patterns); transition-interactive-creative-direction
++ transition-interactive-ui-designer (system respecting iOS HIG + Android Material, states);
+transition-interactive-design-system-engineer (app tokens + components). Gate: transition-interactive-audit-design.</pre>
+    </div>
+    <div class="block" data-copy="Head: design the app's interaction feel. Route it as: transition-interactive-experience-director sets the concept; transition-interactive-motion-designer choreographs screen transitions and shared-element animation; transition-interactive-micro-interaction handles gestures (swipe, drag, pull-to-refresh), haptics and press states; transition-interactive-mobile-crossplatform implements natively. Respect reduce-motion / OS accessibility settings; keep 60fps. Gate: transition-interactive-audit-design + transition-interactive-qa-cross-browser. Prototype first; I approve.">
+      <span class="badge">copy</span>
+      <h3>App interactions · gestures, haptics &amp; motion</h3>
+      <pre>Head: design the app's interaction feel.
+transition-interactive-experience-director sets concept; transition-interactive-motion-designer choreographs
+transitions/shared-element; transition-interactive-micro-interaction does gestures, haptics,
+press states; transition-interactive-mobile-crossplatform implements. Respect reduce-motion; 60fps.</pre>
+    </div>
+    <div class="block" data-copy="Head: build the app screens and core logic. Route it as: transition-interactive-engineering-lead coordinates; transition-interactive-mobile-crossplatform implements navigation, state management, offline-first storage/caching and sync, lifecycle and permissions; covers empty/error/loading and the failure paths first. Gate: transition-interactive-audit-code + transition-interactive-qa-cross-browser. I approve the stack; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>Build the app · navigation, state &amp; offline-first</h3>
+      <pre>Head: build the app screens and core logic.
+transition-interactive-engineering-lead coordinates; transition-interactive-mobile-crossplatform does navigation,
+state, offline-first storage + sync, lifecycle, permissions, failure paths.
+Gate: transition-interactive-audit-code + transition-interactive-qa-cross-browser.</pre>
+    </div>
+    <div class="block" data-copy="Head: build the app's backend and sync. Route it as: transition-interactive-backend-integration designs the API (OpenAPI), authentication (OAuth/tokens/biometrics), and the offline-sync/conflict-resolution contract with transition-interactive-mobile-crossplatform; no secrets in the diff, designed for flaky networks first. Gate: transition-interactive-audit-code + transition-interactive-security-privacy. I approve the data-usage decisions.">
+      <span class="badge">copy</span>
+      <h3>App backend, auth &amp; data sync</h3>
+      <pre>Head: build the app's backend and sync.
+transition-interactive-backend-integration designs API (OpenAPI), auth (OAuth/tokens/biometrics)
+and the offline-sync/conflict contract with transition-interactive-mobile-crossplatform; built for
+flaky networks. Gate: transition-interactive-audit-code + transition-interactive-security-privacy.</pre>
+    </div>
+    <div class="block" data-copy="Head: add push notifications and deep links to the app. Route it to transition-interactive-mobile-crossplatform (APNs/FCM, permission priming, notification categories, background handling) + transition-interactive-backend-integration (token registry, targeting, send pipeline) + transition-interactive-ux-architect (opt-in moment, deep-link routes into the right screen/state). Respect the user's notification permissions; never dark-pattern the opt-in. Gate: transition-interactive-security-privacy. I approve.">
+      <span class="badge">copy</span>
+      <h3>Push notifications &amp; deep links</h3>
+      <pre>Head: add push notifications and deep links.
+transition-interactive-mobile-crossplatform (APNs/FCM, permission priming, background handling)
++ transition-interactive-backend-integration (token registry, targeting, send) + transition-interactive-ux-architect
+(opt-in moment, deep-link routing). Gate: transition-interactive-security-privacy.</pre>
+    </div>
+    <div class="block" data-copy="Head: add in-app purchases / subscriptions. Route it as: transition-interactive-mobile-crossplatform (StoreKit / Google Play Billing, products, restore, receipts) + transition-interactive-backend-integration (server-side receipt validation, entitlements, webhooks) + transition-interactive-security-privacy (fraud, refunds, store-policy compliance) + transition-interactive-ux-architect (paywall placement, no dark patterns). Gate: transition-interactive-audit-code + transition-interactive-security-privacy. I approve pricing/packaging; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>In-app purchases &amp; subscriptions</h3>
+      <pre>Head: add in-app purchases / subscriptions.
+transition-interactive-mobile-crossplatform (StoreKit / Play Billing, restore, receipts) +
+transition-interactive-backend-integration (server-side validation, entitlements, webhooks) +
+transition-interactive-security-privacy (store policy) + transition-interactive-ux-architect (paywall). Gate: audit.</pre>
+    </div>
+    <div class="block" data-copy="Head: build an AI feature inside the app. Route it as: transition-interactive-ai-engineer builds it (on-device vs API model, prompt/RAG, eval set, latency/cost, offline fallback, guardrails) with transition-interactive-mobile-crossplatform for the integration; then transition-interactive-ai-security-review red-teams and transition-interactive-security-privacy reviews on-device/data handling. Report measured limits honestly. Gate: their verdict. I approve using AI.">
+      <span class="badge">copy</span>
+      <h3>AI feature inside the app</h3>
+      <pre>Head: build an AI feature inside the app.
+transition-interactive-ai-engineer (on-device vs API, prompt/RAG, eval, latency, offline
+fallback, guardrails) + transition-interactive-mobile-crossplatform integrate; transition-interactive-ai-security-review
+red-teams; transition-interactive-security-privacy reviews data. Gate: their verdict.</pre>
+    </div>
+    <div class="block" data-copy="Head: optimize app performance. Route it to transition-interactive-system-performance + transition-interactive-mobile-crossplatform: cold/warm startup time, frame rate / jank on scroll and animation, memory footprint, battery and network efficiency, bundle/app size. Measure first, set a budget, fix, show before/after on a low-end device. Gate: transition-interactive-qa-cross-browser. I approve; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>App performance · startup, memory, battery</h3>
+      <pre>Head: optimize app performance.
+transition-interactive-system-performance + transition-interactive-mobile-crossplatform: startup time, jank, memory,
+battery, network, app size. Measure first, set a budget, fix, show
+before/after on a low-end device. Gate: transition-interactive-qa-cross-browser.</pre>
+    </div>
+    <div class="block" data-copy="Head: make the app accessible. Route it as: transition-interactive-audit-design audits against platform a11y (VoiceOver / TalkBack labels + focus order, Dynamic Type / font scaling, contrast, touch target size, reduce-motion) — real failures vs preference, each with the element + fix; transition-interactive-mobile-crossplatform + transition-interactive-ui-designer apply; transition-interactive-qa-cross-browser verifies with the screen reader on device. I approve before it lands.">
+      <span class="badge">copy</span>
+      <h3>App accessibility · VoiceOver / TalkBack</h3>
+      <pre>Head: make the app accessible.
+transition-interactive-audit-design audits (VoiceOver/TalkBack labels + focus, Dynamic Type,
+contrast, touch targets, reduce-motion); transition-interactive-mobile-crossplatform + transition-interactive-ui-designer
+fix; transition-interactive-qa-cross-browser verifies with the screen reader on device.</pre>
+    </div>
+    <div class="block" data-copy="Head: QA the app across devices and OS versions. Route it to transition-interactive-qa-cross-browser + transition-interactive-mobile-crossplatform: a device/OS matrix (range of iOS + Android versions, phone + tablet, notch/safe-area, orientation, small + large screens), permissions flows, offline/poor-network, background/foreground, interrupted states (calls, low battery). Reproduce each bug; blocking vs non-blocking. Gate before release.">
+      <span class="badge">copy</span>
+      <h3>Device &amp; OS QA matrix</h3>
+      <pre>Head: QA the app across devices and OS versions.
+transition-interactive-qa-cross-browser + transition-interactive-mobile-crossplatform: iOS + Android matrix, phone +
+tablet, safe-area, orientation, permissions, offline, background/foreground,
+interrupted states. Reproduce each bug; blocking vs non-blocking.</pre>
+    </div>
+    <div class="block" data-copy="Head: review the app's security and privacy. Route it to transition-interactive-security-privacy: permission minimization and priming, secure storage (Keychain/Keystore), certificate pinning, no secrets in the binary, third-party SDK data flows, LGPD/GDPR + App Store / Play privacy-label/data-safety requirements. Blocking vs non-blocking + remediation; fixes by transition-interactive-mobile-crossplatform / transition-interactive-backend-integration after I approve.">
+      <span class="badge">copy</span>
+      <h3>App security, privacy &amp; permissions</h3>
+      <pre>Head: review the app's security and privacy.
+transition-interactive-security-privacy: permission minimization, secure storage (Keychain/
+Keystore), cert pinning, no secrets in the binary, SDK data flows, LGPD/GDPR
++ store privacy labels. Fixes by transition-interactive-mobile-crossplatform after I approve.</pre>
+    </div>
+    <div class="block" data-copy="Head: get the app ready to ship to the stores. Route it as: transition-interactive-quality-lead consolidates the pre-release gate (audit pod: code, a11y, security, device QA, performance); transition-interactive-content-seo writes the store listing + ASO (title, keywords, screenshots copy); transition-interactive-devops-deploy sets up the mobile CI/CD (build signing, TestFlight / Play internal testing, phased rollout, crash reporting). Ship only if APPROVED, with a rollback/halt-rollout plan. I give the go; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>App Store / Play release · ASO + CI/CD</h3>
+      <pre>Head: get the app ready to ship to the stores.
+transition-interactive-quality-lead consolidates the pre-release gate (code, a11y, security,
+device QA, perf); transition-interactive-content-seo does listing + ASO; transition-interactive-devops-deploy sets up
+signing, TestFlight/Play testing, phased rollout, crash reporting. Ship if APPROVED.</pre>
+    </div>
+    <div class="block" data-copy="Head: instrument and grow the app. Route it as: transition-interactive-growth-lead defines success (activation, retention, DAU/MAU, funnel); transition-interactive-analytics-growth sets up event instrumentation, funnels, cohort/retention analysis and reads them post-launch, separating correlation from cause; proposes the next iteration (onboarding, push strategy, paywall). Close the loop in DECISIONS.md; I approve the metric definitions.">
+      <span class="badge">copy</span>
+      <h3>App analytics, retention &amp; growth</h3>
+      <pre>Head: instrument and grow the app.
+transition-interactive-growth-lead defines success (activation, retention, DAU/MAU, funnel);
+transition-interactive-analytics-growth instruments events, funnels, cohort/retention, reads
+post-launch, proposes next iteration. Close the loop in DECISIONS.md.</pre>
+    </div>
+    </div>
+  </details>
+
+  <details class="bundle">
+    <summary><span class="bundle-name">E · Quality &amp; Launch</span><span class="bundle-desc">Audit, gate and ship — the audit pod is always last.</span></summary>
+    <div class="bundle-body">
+      <div class="block block--allinone" data-copy="Head: run the full Quality & Launch gate. transition-interactive-quality-lead coordinates the audit pod — transition-interactive-audit-code, transition-interactive-audit-design, transition-interactive-security-privacy, transition-interactive-qa-cross-browser (all sizes/formats, iOS + Android, all browsers) and transition-interactive-system-performance — and returns ONE verdict (blocking vs non-blocking, element + metric). Only if APPROVED, transition-interactive-devops-deploy ships with a tested rollback + observability. Never skip the audit for a deadline; I give the go.">
+        <span class="badge">copy all</span>
+        <h3>▶ All-in-one — run this whole bundle</h3>
+        <pre>Head: run the full Quality & Launch gate. transition-interactive-quality-lead coordinates the audit pod — transition-interactive-audit-code, transition-interactive-audit-design, transition-interactive-security-privacy, transition-interactive-qa-cross-browser (all sizes/formats, iOS + Android, all browsers) and transition-interactive-system-performance — and returns ONE verdict (blocking vs non-blocking, element + metric). Only if APPROVED, transition-interactive-devops-deploy ships with a tested rollback + observability. Never skip the audit for a deadline; I give the go.</pre>
+      </div>
+  <div class="block" data-copy="Head: audit [screen/file/link]. Run transition-interactive-audit-design (WCAG 2.2 AA, contrast, hierarchy, states, conversion) and return blocking vs. non-blocking findings, with the specific element + metric.">
+    <span class="badge">copy</span>
+    <h3>Audit a design/site before launch</h3>
+    <pre>Head: audit [screen/file/link]. Run transition-interactive-audit-design (WCAG 2.2 AA,
+contrast, hierarchy, states, conversion) and return blocking vs. non-blocking
+findings, with the specific element + metric.</pre>
+  </div>
+  <div class="block" data-copy="Head: run a full code + performance + responsiveness audit of this website and leave it production-clean. Route it as: transition-interactive-engineering-lead coordinates; transition-interactive-audit-code (OWASP, dead code, code smells, dependency review); transition-interactive-security-privacy (secrets, headers/CSP, third-parties); transition-interactive-system-performance (bundle/asset weight, Core Web Vitals LCP/CLS/INP, render path, remove render-blocking); transition-interactive-explore to map and flag unused files/assets/deps to prune in the repo itself; transition-interactive-qa-cross-browser to verify responsiveness across ALL sizes and formats — mobile, tablet (portrait + landscape) and desktop, 320→1920px, iOS Safari + Android Chrome + Firefox + Edge, no horizontal overflow, safe-area/notch, orientation. transition-interactive-quality-lead consolidates one gate verdict (blocking vs non-blocking, each with the file/element + metric). Record trade-offs in DECISIONS.md, propose the cleanup as a diff, and don't delete or merge anything without my approval.">
+    <span class="badge">copy</span>
+    <h3>Full code audit · optimize, clean up &amp; verify responsiveness</h3>
+    <pre>Head: full code + performance + responsiveness audit — leave it
+production-clean. transition-interactive-engineering-lead coordinates;
+transition-interactive-audit-code (OWASP, dead code, smells, deps),
+transition-interactive-security-privacy (secrets, CSP, third-parties),
+transition-interactive-system-performance (asset weight, LCP/CLS/INP,
+render-blocking), transition-interactive-explore (map unused files/deps to
+prune in the repo), transition-interactive-qa-cross-browser (responsiveness
+across ALL sizes — mobile, tablet portrait+landscape, desktop, 320→1920px,
+iOS Safari + Android Chrome + Firefox + Edge, no h-overflow, safe-area).
+transition-interactive-quality-lead consolidates one gate verdict. Record
+trade-offs in DECISIONS.md; propose cleanup as a diff; delete/merge nothing
+without my approval.</pre>
+  </div>
+  <div class="block" data-copy="Head: is this ready to ship? Run the full pre-launch readiness gate, then deploy only if approved. Route it as: transition-interactive-quality-lead coordinates the audit pod — transition-interactive-audit-code (code + deps + OWASP), transition-interactive-audit-design (WCAG 2.2 AA, hierarchy, states), transition-interactive-security-privacy (secrets, CSP, headers, third-parties, LGPD/GDPR), transition-interactive-qa-cross-browser (responsiveness across all sizes/formats, iOS + Android, all browsers), transition-interactive-system-performance (Core Web Vitals, weight). Also check SEO/meta/og with transition-interactive-content-seo. quality-lead returns ONE verdict — blocking vs non-blocking, each with element + metric. Only if APPROVED, transition-interactive-devops-deploy ships with a tested rollback plan and observability. Never skip the audit for a deadline; record the decision in DECISIONS.md; I give the go.">
+    <span class="badge">copy</span>
+    <h3>Ship-ready pre-launch gate <span style="color:var(--accent-2)">(optimized &amp; ready)</span></h3>
+    <pre>Head: is this ready to ship? Full pre-launch gate, then deploy if approved.
+transition-interactive-quality-lead coordinates the audit pod —
+transition-interactive-audit-code, transition-interactive-audit-design,
+transition-interactive-security-privacy, transition-interactive-qa-cross-browser
+(all sizes/formats, iOS + Android, all browsers), transition-interactive-system-performance;
+transition-interactive-content-seo checks meta/og. quality-lead returns ONE
+verdict (blocking vs non-blocking, element + metric). If APPROVED,
+transition-interactive-devops-deploy ships with tested rollback + observability.
+Never skip the audit for a deadline; I give the go.</pre>
+  </div>
+  <div class="block" data-copy="Head: review security and privacy before we handle personal data / go live. Route it to transition-interactive-security-privacy: data minimization, LGPD/GDPR/Privacy-Act compliance, secrets management, CSP and security headers, cookies and third-party scripts, auth hardening. It flags risks and validates with legal (it does not give a legal opinion). Return blocking vs non-blocking findings with the specific element + remediation. Fixes are applied by transition-interactive-backend-integration / transition-interactive-frontend-multistack after I approve; record trade-offs in DECISIONS.md.">
+    <span class="badge">copy</span>
+    <h3>Security &amp; privacy review <span style="color:var(--accent-2)">(LGPD / GDPR)</span></h3>
+    <pre>Head: review security and privacy before handling personal data / launch.
+transition-interactive-security-privacy: data minimization, LGPD/GDPR compliance,
+secrets, CSP + security headers, cookies/third-parties, auth hardening. Blocking
+vs non-blocking + remediation. Fixes applied by transition-interactive-backend-integration
+/ transition-interactive-frontend-multistack after I approve.</pre>
+  </div>
+  <div class="block" data-copy="Head: run an accessibility (WCAG 2.2 AA) pass on [page/site]. Route it as: transition-interactive-audit-design audits — contrast (1.4.3 / 1.4.11), keyboard operability and focus order, screen reader, headings/landmarks, states, reduced motion — separating real failures from preference, each finding as element + measured value + severity. transition-interactive-ui-designer + transition-interactive-frontend-multistack apply the fixes; transition-interactive-qa-cross-browser confirms across devices. I approve before it lands; record trade-offs in DECISIONS.md.">
+    <span class="badge">copy</span>
+    <h3>Accessibility pass <span style="color:var(--accent-2)">(WCAG 2.2 AA)</span></h3>
+    <pre>Head: run a WCAG 2.2 AA pass on [page/site].
+transition-interactive-audit-design audits (contrast, keyboard/focus, screen
+reader, landmarks, states, reduced motion) — element + measured value +
+severity. transition-interactive-ui-designer + transition-interactive-frontend-multistack
+fix; transition-interactive-qa-cross-browser confirms across devices.</pre>
+  </div>
+  <div class="block" data-copy="Head: set up CI/CD and observability for this project. Route it to transition-interactive-devops-deploy: pipeline (build/test/lint on every PR), containers/serverless, progressive rollout, a TESTED rollback plan, monitoring and alerting. Deploy only after the audit gate. Never ship without a tested rollback. Record trade-offs in DECISIONS.md; I approve the release plan and the go-live date.">
+    <span class="badge">copy</span>
+    <h3>Set up CI/CD &amp; observability</h3>
+    <pre>Head: set up CI/CD and observability.
+transition-interactive-devops-deploy: pipeline (build/test/lint per PR),
+containers/serverless, progressive rollout, a TESTED rollback, monitoring +
+alerting. Deploy only after the audit gate; never ship without a tested
+rollback. I approve the release plan + go-live date.</pre>
+  </div>
+    </div>
+  </details>
+
+  <details class="bundle">
+    <summary><span class="bundle-name">F · Grow &amp; Measure</span><span class="bundle-desc">Content, conversion and closing the loop.</span></summary>
+    <div class="bundle-body">
+      <div class="block block--allinone" data-copy="Head: run the full Grow & Measure phase. transition-interactive-growth-lead defines the success metric per page; transition-interactive-content-seo writes copy, metatags, schema and content architecture; transition-interactive-analytics-growth instruments events + funnels and reads them post-launch, separating correlation from cause, then proposes the next iteration. Close the loop in DECISIONS.md; I approve the metric definitions.">
+        <span class="badge">copy all</span>
+        <h3>▶ All-in-one — run this whole bundle</h3>
+        <pre>Head: run the full Grow & Measure phase. transition-interactive-growth-lead defines the success metric per page; transition-interactive-content-seo writes copy, metatags, schema and content architecture; transition-interactive-analytics-growth instruments events + funnels and reads them post-launch, separating correlation from cause, then proposes the next iteration. Close the loop in DECISIONS.md; I approve the metric definitions.</pre>
+      </div>
+  <div class="block" data-copy="Head: improve content, SEO and conversion for [page/site]. Route it as: transition-interactive-growth-lead defines the success metric per page first; transition-interactive-content-seo writes copy in the brand voice, metatags, schema markup and content architecture (optimized for the human first, then search); transition-interactive-ux-architect aligns flow to the conversion goal; transition-interactive-analytics-growth sets up event instrumentation and funnels to measure it. Return the plan before writing; I approve; record trade-offs in DECISIONS.md.">
+    <span class="badge">copy</span>
+    <h3>Content, SEO &amp; conversion</h3>
+    <pre>Head: improve content, SEO and conversion for [page/site].
+transition-interactive-growth-lead defines the success metric per page;
+transition-interactive-content-seo writes copy (brand voice), metatags, schema,
+content architecture; transition-interactive-ux-architect aligns flow to the
+conversion goal; transition-interactive-analytics-growth instruments events +
+funnels. Plan before writing; I approve.</pre>
+  </div>
+  <div class="block" data-copy="Head: define what 'success' means for [page/feature] and read it after launch. Route it as: transition-interactive-analytics-growth defines the North Star + input metrics, the event instrumentation plan (before we build) and the funnels; after launch it reads the numbers and separates correlation from cause; transition-interactive-growth-lead ties it to the business goal and proposes the next iteration. Close the loop in DECISIONS.md; I approve the metric definition.">
+    <span class="badge">copy</span>
+    <h3>Define success metrics &amp; read post-launch</h3>
+    <pre>Head: define 'success' for [page/feature] and read it after launch.
+transition-interactive-analytics-growth sets North Star + input metrics, the
+event instrumentation plan (before build) and funnels; after launch reads the
+numbers, separates correlation from cause; transition-interactive-growth-lead
+ties it to the business goal + next iteration. Close the loop in DECISIONS.md.</pre>
+  </div>
+    </div>
+  </details>
+
+  <details class="bundle">
+    <summary><span class="bundle-name">G · Apps</span><span class="bundle-desc">Mobile &amp; cross-platform — from concept to store and growth.</span></summary>
+    <div class="bundle-body">
+      <div class="block block--allinone" data-copy="Head: run the full app lifecycle for [platforms]. transition-interactive-mobile-crossplatform leads delivery; transition-interactive-ux-architect + transition-interactive-ui-designer + transition-interactive-design-system-engineer design it to platform conventions (iOS HIG / Android Material); build navigation/state/offline, backend/auth/sync, push, in-app purchases and any AI feature; transition-interactive-system-performance optimizes startup/memory/battery. Gate: transition-interactive-audit-design + transition-interactive-audit-code + transition-interactive-security-privacy + transition-interactive-qa-cross-browser (device/OS matrix). Then transition-interactive-devops-deploy handles the store release (signing, phased rollout) with transition-interactive-content-seo for ASO and transition-interactive-analytics-growth for retention. I approve each gate; record trade-offs in DECISIONS.md.">
+        <span class="badge">copy all</span>
+        <h3>▶ All-in-one — run this whole bundle</h3>
+        <pre>Head: run the full app lifecycle for [platforms]. transition-interactive-mobile-crossplatform leads delivery; transition-interactive-ux-architect + transition-interactive-ui-designer + transition-interactive-design-system-engineer design it to platform conventions (iOS HIG / Android Material); build navigation/state/offline, backend/auth/sync, push, in-app purchases and any AI feature; transition-interactive-system-performance optimizes startup/memory/battery. Gate: transition-interactive-audit-design + transition-interactive-audit-code + transition-interactive-security-privacy + transition-interactive-qa-cross-browser (device/OS matrix). Then transition-interactive-devops-deploy handles the store release (signing, phased rollout) with transition-interactive-content-seo for ASO and transition-interactive-analytics-growth for retention. I approve each gate; record trade-offs in DECISIONS.md.</pre>
+      </div>
+    <div class="block" data-copy="Head: briefing intake — goal [X], audience [Y], constraints [deadline/budget/stack]. Run discovery with transition-interactive-ux-architect.">
+      <span class="badge">copy</span>
+      <h3>New-project intake</h3>
+      <pre>Head: briefing intake — goal [X], audience [Y], constraints
+[deadline/budget/stack]. Run discovery with transition-interactive-ux-architect.</pre>
+    </div>
+    <div class="block" data-copy="Head: validate [flow/hypothesis] with users. Route it as: transition-interactive-ux-research plans the research (interview script without bias, usability test moderated/unmoderated, desk research), synthesizes the findings into evidence with a severity rubric, and names the sample size/limits; transition-interactive-ux-architect turns the evidence into structure decisions (it decides, research informs). Return the findings before any redesign; I approve the direction; record trade-offs in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>User research &amp; usability testing</h3>
+      <pre>Head: validate [flow/hypothesis] with users.
+transition-interactive-ux-research plans it (unbiased interview script,
+usability test, desk research), synthesizes evidence with a severity rubric,
+names the sample size/limits; transition-interactive-ux-architect turns evidence
+into structure decisions. Findings before any redesign; I approve.</pre>
+    </div>
+    <div class="block" data-copy="Head: prove whether [idea] is technically feasible before we commit the team. Route it to transition-interactive-creative-technologist: build a throwaway proof-of-concept / spike (timeboxed) and return a clear answer — feasible / not feasible / feasible with cost X — plus the production cost of each approach. If viable, I decide build/buy/borrow/automate/eliminate; the real implementation is then done under the gates by the engineering pod. Record the decision in DECISIONS.md.">
+      <span class="badge">copy</span>
+      <h3>Prove feasibility <span style="color:var(--accent-2)">(spike / prototype)</span></h3>
+      <pre>Head: prove whether [idea] is technically feasible before committing.
+transition-interactive-creative-technologist builds a throwaway timeboxed spike
+and returns a clear answer — feasible / not / feasible with cost X — plus the
+production cost. If viable I decide build/buy/borrow; real implementation runs
+under the gates by the engineering pod.</pre>
+    </div>
+      </div>
+  </details>
+
+
+  <h2 id="install">Install the team in another repository</h2>
+  <p class="section-sub">Paste into a Claude Code session open in the target repository. Ready-made, natural-language command. The 33 agents live <b>flat</b> in <code>.claude/agents/</code> (files <code>transition-interactive-*.md</code>, no subfolder) — so they're invokable in any harness and never collide with other agents. The team doc is <code>TRANSITION-INTERACTIVE.md</code>, so it never collides with the target repo's own <code>CLAUDE.md</code>.</p>
+
+  <div class="block" data-copy="Copy the .claude/ folder (agents, hooks and settings.json), the TRANSITION-INTERACTIVE.md and the DECISIONS.md from the ai-igorbotelho-studio/transition-interactive repository (main branch, current HEAD — not a fork, tag or cached clone) into the root of this repository. Don't overwrite anything that already exists without showing me the conflict first. Then commit. After that, open a NEW Claude Code session and run /agents to confirm all 33 loaded — you should see transition-interactive-head. If you only see 18, this repo pulled an old copy: run the 'Update an existing install' command below.">
+    <span class="badge">copy</span>
+    <h3>Full team (33 agents + hook + docs)</h3>
+    <pre>Copy the .claude/ folder (agents, hooks and settings.json), the TRANSITION-INTERACTIVE.md
+and the DECISIONS.md from the ai-igorbotelho-studio/transition-interactive repository
+(main branch, current HEAD — not a fork/tag/cached clone) into the root of this
+repository. Don't overwrite anything that already exists without showing me the
+conflict first. Then commit. Then open a NEW session and run /agents to confirm
+all 33 (you should see transition-interactive-head); if you only see 18, run the
+Update command below.</pre>
+  </div>
+
+  <div class="block" data-copy="Copy the .claude/ folder (agents, hooks and settings.json), the TRANSITION-INTERACTIVE.md and the DECISIONS.md from the ai-igorbotelho-studio/transition-interactive repository (main branch) into the root of this repository, without overwriting anything without showing me the conflict first. Then, if this repository has a CLAUDE.md, append this line to the end of it (create CLAUDE.md with just this line if it doesn't exist): 'For the Transition Interactive team of subagents (Head, pipeline, DACI, gates), read TRANSITION-INTERACTIVE.md and act as the Head.' Then commit. After that, open a NEW Claude Code session and run /agents to confirm all 33 loaded — you should see transition-interactive-head. If you only see 18, this repo pulled an old copy: run the 'Update an existing install' command below.">
+    <span class="badge">copy</span>
+    <h3>Full team + auto-load wiring <span style="color:var(--accent-2)">(recommended)</span></h3>
+    <pre>Copy the .claude/ folder, the TRANSITION-INTERACTIVE.md and the DECISIONS.md
+from ai-igorbotelho-studio/transition-interactive (main branch) into this repo, without
+overwriting anything without showing me the conflict first. Then, if this repo
+has a CLAUDE.md, append this line to it (or create one with just this line):
+"For the Transition Interactive team of subagents (Head, pipeline, DACI, gates),
+read TRANSITION-INTERACTIVE.md and act as the Head." Then commit. Then open a
+NEW session and run /agents to confirm all 33 (you should see
+transition-interactive-head); if you only see 18, run the Update command below.</pre>
+  </div>
+
+  <div class="block" data-copy="Copy the 33 transition-interactive-*.md agent files from .claude/agents/ of the ai-igorbotelho-studio/transition-interactive repository (main branch) directly into this repository's .claude/agents/ (flat — they are not in a subfolder). Don't overwrite anything that already exists without showing me the conflict first, and don't touch any other agents this repo already has. Then open a NEW session and run /agents to confirm they're invokable (you should see transition-interactive-head).">
+    <span class="badge">copy</span>
+    <h3>Agents only <span style="color:var(--accent-2)">(flat in .claude/agents/)</span></h3>
+    <pre>Copy the 33 transition-interactive-*.md files from .claude/agents/ of
+ai-igorbotelho-studio/transition-interactive (main) directly into this repo's
+.claude/agents/ (flat, no subfolder). Don't overwrite anything without showing me
+the conflict first, and don't touch any other agents this repo has. Then open a
+NEW session and run /agents (you should see transition-interactive-head).</pre>
+  </div>
+
+  <div class="block" data-copy="Update the transition interactive already installed in this repository to the latest version, WITHOUT touching any other agents this repo may have. The team's agents are the files named transition-interactive-*.md directly inside .claude/agents/ (flat, not a subfolder). Steps: (1) copy the current transition-interactive-*.md agents from the ai-igorbotelho-studio/transition-interactive repo (main branch, where they live directly in .claude/agents/) into this repo's .claude/agents/; also overwrite .claude/hooks/transition-interactive-guard-write-scope.sh, .claude/settings.json and TRANSITION-INTERACTIVE.md. (2) delete ONLY the previous version of THIS team: the old flat-named product-team files (ux-architect.md, ui-designer.md, audit-code.md, motion-designer.md, etc. — the pre-prefix set), any leftover .claude/agents/transition-interactive/ subfolder from an older layout, and any transition-interactive-*.md that no longer exists upstream. (3) NEVER delete or modify agents that do not belong to the transition interactive — if this repo has other teams (e.g. a digital-agency with its own agents), leave every one of them exactly as is. (4) do NOT overwrite my DECISIONS.md (it's my own product log) — only create it from upstream if there is none; do NOT touch my CLAUDE.md or my source code. Show me the full list of files you will add / overwrite / delete and wait for my approval BEFORE deleting anything. Then commit and push, and remind me to start a NEW Claude Code session so all agents reload.">
+    <span class="badge">copy</span>
+    <h3>Update an existing install <span style="color:var(--accent-2)">(repo already on an older team)</span></h3>
+    <pre>Update the transition interactive to the latest version WITHOUT touching any other
+agents this repo has. The team = files transition-interactive-*.md directly in
+.claude/agents/ (flat, not a subfolder). (1) Copy the current
+transition-interactive-*.md from ai-igorbotelho-studio/transition-interactive (main,
+they live directly in .claude/agents/) into this repo's .claude/agents/; also
+overwrite the hook, .claude/settings.json and TRANSITION-INTERACTIVE.md. (2) Delete
+ONLY the old flat-named product-team files (ux-architect.md, audit-code.md, … the
+pre-prefix set), any leftover .claude/agents/transition-interactive/ subfolder, and
+any transition-interactive-*.md gone upstream. (3) NEVER touch agents of other teams
+(e.g. a digital-agency) — leave them all as is. (4) Do NOT overwrite my
+DECISIONS.md, CLAUDE.md or source. Show me the add/overwrite/delete list and wait
+for my approval BEFORE deleting. Then commit, push, open a NEW session.</pre>
+  </div>
+
+  <p class="webapp-note" style="border-left-color:var(--highlight)"><strong style="color:var(--highlight)">⚠ Repo with more than one team?</strong> The update only ever touches the <b>transition interactive</b> (files named <code>transition-interactive-*.md</code> directly in <code>.claude/agents/</code>). If your repo also has other agents — a separate <code>digital-agency</code>, your own custom agents — they are <b>never</b> deleted or changed. Do not let an update "mirror the source" or "delete everything not upstream": that would wipe your other teams. The update prunes only the <em>old versions of this team</em>, and asks for your approval before deleting anything.</p>
+
+  <div class="block" data-copy="Which version of the transition interactive is installed in this repo? Count the transition-interactive-*.md files in .claude/agents/ (also check for a leftover .claude/agents/transition-interactive/ subfolder from an older layout) and check whether transition-interactive-head.md exists. Tell me: 33 files + head present = current (Head → pod leaders → teams); 18 files, no head = old structure; anything else = partial. If it's not 33, recommend the Update command.">
+    <span class="badge">copy</span>
+    <h3>Check which version is installed</h3>
+    <pre>Which version of the transition interactive is installed here? Count the
+transition-interactive-*.md files in .claude/agents/ (and check for a leftover
+.claude/agents/transition-interactive/ subfolder), and check if transition-interactive-head.md
+exists. 33 + head = current; 18 + no head = old; anything else = partial. If it's
+not 33, recommend the Update command.</pre>
+  </div>
+
+  <p class="section-sub" style="margin-top:12px"><b style="color:var(--highlight)">Seeing only 18 agents?</b> The most common cause: a <b>bare <code>git clone</code> lands on the repo's default branch, which may still be an old 18-agent branch</b> — <code>main</code> has the current 33. Always clone or pull from <code>main</code>:</p>
+  <div class="block" data-copy="git clone --depth 1 --branch main https://github.com/ai-igorbotelho-studio/transition-interactive">
+    <span class="badge">copy</span>
+    <pre>git clone --depth 1 --branch main https://github.com/ai-igorbotelho-studio/transition-interactive</pre>
+  </div>
+  <p class="section-sub" style="margin-top:8px">Other causes of an old snapshot: a fork, a tag, a cached clone, or an install done before an update. Two things fix it: run the <b>Update</b> command above (pulls the current 33 from <code>main</code> and prunes obsolete roles) <em>and</em> <b>open a new session</b> — subagents load at session start, so the same session can keep showing the old count. Quick tell: if <code>transition-interactive-head</code> is in <code>/agents</code>, you're on 33; if not, you're on 18. Permanent fix (repo owner): set <code>main</code> as the repository's default branch so bare clones get 33.</p>
+
+  <p class="section-sub" style="margin-top:12px"><b style="color:var(--highlight)">Updating vs. installing:</b> a fresh install refuses to overwrite; an <b>update</b> intentionally replaces the old <code>.claude/</code> team files and <code>TRANSITION-INTERACTIVE.md</code> (and prunes roles that were renamed or removed) so the repo moves to the current 33-agent structure. It never touches your own code, your <code>CLAUDE.md</code>, or your <code>DECISIONS.md</code> — if your repo uses <code>DECISIONS.md</code> as its own product decision log, the update leaves it intact (upstream's <code>DECISIONS.md</code> is just the team-build diary and isn't needed in your repo). Subagents load at session start, so <b>open a new session</b> (or reopen <code>/agents</code>) after updating.</p>
+
+  <p class="section-sub" style="margin-top:12px"><b style="color:var(--accent-2)">Why the wiring:</b> Claude Code only auto-loads a file named exactly <code>CLAUDE.md</code> as project instructions. Since the team doc is <code>TRANSITION-INTERACTIVE.md</code>, add one pointer line to the target repo's <code>CLAUDE.md</code> so every new session's Head reads the pipeline and gates automatically.</p>
+
+  <p class="section-sub" style="margin-top:8px">Script alternative (terminal): <code>bash &lt;(curl -fsSL https://raw.githubusercontent.com/ai-igorbotelho-studio/transition-interactive/main/scripts/transition-interactive-instalar-equipe.sh)</code></p>
+
+  <h2 id="setup">How to set it up (step by step)</h2>
+  <p class="section-sub">Where and how to put the team to work — the simplest way that works.</p>
+
+  <div class="ctx key">
+    <h3>① Add the team to a Claude Code conversation already running in another repo</h3>
+    <p class="ctx-sub">You're already in a session in another repository and want the team there.</p>
+    <ol class="steps">
+      <li>In that conversation, paste the <b>"Full team"</b> command above — it copies <code>.claude/</code>, <code>TRANSITION-INTERACTIVE.md</code> and <code>DECISIONS.md</code>, showing you any conflict before overwriting.</li>
+      <li>Commit: <code>git add .claude TRANSITION-INTERACTIVE.md DECISIONS.md &amp;&amp; git commit &amp;&amp; git push</code>.</li>
+      <li>Since subagents load <b>at session start</b>, open a <b>new session</b> in that repo (or reopen <code>/agents</code>) for the 33 to appear.</li>
+      <li>Confirm with <code>/agents</code> and kick off: <code>Use the transition-interactive-explore subagent to map this project.</code></li>
+    </ol>
+    <p class="prompt-label">Ready prompt</p>
+    <div class="block" data-copy="Copy the .claude/ folder (agents, hooks and settings.json), the TRANSITION-INTERACTIVE.md and the DECISIONS.md from the ai-igorbotelho-studio/transition-interactive repository (main branch) into the root of this repository. Don't overwrite anything that already exists without showing me the conflict first. Then commit and push.">
+      <span class="badge">copy</span>
+      <pre>Copy the .claude/ folder (agents, hooks and settings.json), the TRANSITION-INTERACTIVE.md
+and the DECISIONS.md from the ai-igorbotelho-studio/transition-interactive repository
+(main branch) into the root of this repository. Don't overwrite anything that
+already exists without showing me the conflict first. Then commit and push.</pre>
+    </div>
+  </div>
+
+  <div class="ctx key">
+    <h3>② Start a new GitHub repo already including the team</h3>
+    <p class="ctx-sub">A repository that ships with the 33 agents, the hook and the CI.</p>
+    <ol class="steps">
+      <li><b>Fastest (template):</b> open <code>github.com/ai-igorbotelho-studio/transition-interactive</code> → <b>"Use this template"</b> → <b>Create a new repository</b>. The new repo ships with everything.</li>
+      <li>(One-time prerequisite: mark this repo as a <em>Template</em> in Settings → General — see <code>docs/transition-interactive-github-setup.md</code>.)</li>
+      <li><b>Without template:</b> create the empty repo, open it in Claude Code and paste the "Full team" command above; then <code>commit</code> + <code>push</code> to <code>main</code>.</li>
+      <li>Done: every new session in that repo loads the 33 automatically.</li>
+    </ol>
+    <p class="prompt-label">Ready prompt (no-template path)</p>
+    <div class="block" data-copy="Copy the .claude/ folder (agents, hooks and settings.json), the TRANSITION-INTERACTIVE.md and the DECISIONS.md from the ai-igorbotelho-studio/transition-interactive repository (main branch) into the root of this repository, then commit and push to main. Don't overwrite anything that already exists without showing me the conflict first.">
+      <span class="badge">copy</span>
+      <pre>Copy the .claude/ folder (agents, hooks and settings.json), the TRANSITION-INTERACTIVE.md
+and the DECISIONS.md from the ai-igorbotelho-studio/transition-interactive repository
+(main branch) into the root of this repository, then commit and push to main.
+Don't overwrite anything that already exists without showing me the conflict first.</pre>
+    </div>
+  </div>
+
+  <div class="ctx">
+    <h3>Claude Code · new project</h3>
+    <p class="ctx-sub">The ideal path — isolated execution, hook and gates active.</p>
+    <ol class="steps">
+      <li>Create and enter the folder: <code>mkdir my-project &amp;&amp; cd my-project</code>.</li>
+      <li>Run the installer (the "Install the team" block above), or paste the "Full team" command inside Claude Code.</li>
+      <li>Open the project in Claude Code and type <code>/agents</code> — confirm the 33.</li>
+      <li>If the hook doesn't activate right away, open <code>/hooks</code> once.</li>
+      <li>Paste a briefing starting with <code>Head:</code> and let the pipeline run.</li>
+    </ol>
+    <p class="prompt-label">Ready prompt (kick-off)</p>
+    <div class="block" data-copy="Head: briefing intake — goal [X], audience [Y], constraints [deadline/budget/stack]. Run discovery with transition-interactive-explore and transition-interactive-ux-architect, then propose the design with transition-interactive-creative-direction + transition-interactive-ui-designer. Record trade-offs in DECISIONS.md and don't advance any gate without my approval.">
+      <span class="badge">copy</span>
+      <pre>Head: briefing intake — goal [X], audience [Y], constraints
+[deadline/budget/stack]. Run discovery with transition-interactive-explore and
+transition-interactive-ux-architect, then propose the design with transition-interactive-creative-direction
++ transition-interactive-ui-designer. Record trade-offs in DECISIONS.md and don't advance any
+gate without my approval.</pre>
+    </div>
+  </div>
+
+  <div class="ctx">
+    <h3>Claude Code · existing project</h3>
+    <p class="ctx-sub">Adds the team without touching your code.</p>
+    <ol class="steps">
+      <li>In the repo root, paste the "Full team" command — it <b>won't overwrite</b> anything without showing the conflict first.</li>
+      <li>Version it: <code>git add .claude TRANSITION-INTERACTIVE.md DECISIONS.md &amp;&amp; git commit</code>.</li>
+      <li>Open in Claude Code → <code>/agents</code> to confirm.</li>
+      <li>Trigger as usual — the team now coexists with the current code.</li>
+    </ol>
+    <p class="heads-up">Tip: start with <code>Use the transition-interactive-explore subagent</code> so the team understands the project before touching it.</p>
+    <p class="prompt-label">Ready prompt</p>
+    <div class="block" data-copy="Copy the .claude/ folder (agents, hooks and settings.json), the TRANSITION-INTERACTIVE.md and the DECISIONS.md from the ai-igorbotelho-studio/transition-interactive repository (main branch) into the root of this repository. Don't overwrite anything that already exists without showing me the conflict first. Then commit.">
+      <span class="badge">copy</span>
+      <pre>Copy the .claude/ folder (agents, hooks and settings.json), the TRANSITION-INTERACTIVE.md
+and the DECISIONS.md from the ai-igorbotelho-studio/transition-interactive repository
+(main branch) into the root of this repository. Don't overwrite anything that
+already exists without showing me the conflict first. Then commit.</pre>
+    </div>
+  </div>
+
+  <div class="ctx">
+    <h3>Via GitHub</h3>
+    <p class="ctx-sub">Bring the team to a repository — and every new session ships with it.</p>
+    <ol class="steps">
+      <li><b>New project:</b> at <code>github.com/ai-igorbotelho-studio/transition-interactive</code> click <b>"Use this template"</b> (or <em>Fork</em>) — the repo ships with the 33 agents.</li>
+      <li><b>Existing project:</b> in a Claude Code web session pointed at your repo, paste the "Full team" command — or copy <code>.claude/</code>, <code>TRANSITION-INTERACTIVE.md</code> and <code>DECISIONS.md</code> and commit.</li>
+      <li>Review and <b>merge the PR into <code>main</code></b>.</li>
+      <li>From then on, every new session in that repo loads the 33 automatically.</li>
+      <li><b>Optional:</b> <code>.github/workflows/ci.yml</code> validates the agents and the hook on every PR.</li>
+    </ol>
+    <p class="heads-up">Set <code>main</code> as the repo's default branch so anyone cloning without picking a branch gets the team.</p>
+    <p class="prompt-label">Ready prompt (open a PR)</p>
+    <div class="block" data-copy="Copy the .claude/ folder (agents, hooks and settings.json), the TRANSITION-INTERACTIVE.md and the DECISIONS.md from the ai-igorbotelho-studio/transition-interactive repository (main branch) into the root of this repository without overwriting anything without showing me the conflict first, then commit, push and open a pull request into main.">
+      <span class="badge">copy</span>
+      <pre>Copy the .claude/ folder (agents, hooks and settings.json), the TRANSITION-INTERACTIVE.md
+and the DECISIONS.md from the ai-igorbotelho-studio/transition-interactive repository
+(main branch) into the root of this repository without overwriting anything
+without showing me the conflict first, then commit, push and open a pull
+request into main.</pre>
+    </div>
+  </div>
+
+  <div class="ctx">
+    <h3>Claude chats (claude.ai)</h3>
+    <p class="ctx-sub">Real subagents only exist in Claude Code. In a plain chat you reproduce the Head manually.</p>
+    <ol class="steps">
+      <li>Create a <b>Project</b> on claude.ai (or use the custom instructions).</li>
+      <li>Paste the <code>TRANSITION-INTERACTIVE.md</code> content as the Project's instructions/knowledge.</li>
+      <li>Ask: <em>"Act as the Head and coordinate the described roles; when I name a role, embody its profile."</em></li>
+      <li>Use the <code>Use the transition-interactive-X subagent to…</code> phrases — Claude simulates the role.</li>
+    </ol>
+    <p class="heads-up">Honest limit: no isolated execution, no scope hook and no automatic gates — it's conversational orchestration, not the tool-backed pipeline.</p>
+    <p class="prompt-label">Ready prompt</p>
+    <div class="block" data-copy="Act as the Head of a transition interactive of 33 subagents (I'll paste TRANSITION-INTERACTIVE.md as the Project knowledge). Coordinate the roles; when I name a role like transition-interactive-ux-architect or transition-interactive-audit-design, embody its seniority profile. Follow the pipeline gates and never skip the audit pod before anything goes to production.">
+      <span class="badge">copy</span>
+      <pre>Act as the Head of a transition interactive of 33 subagents (I'll paste
+TRANSITION-INTERACTIVE.md as the Project knowledge). Coordinate the roles; when I name a role
+like transition-interactive-ux-architect or transition-interactive-audit-design, embody its seniority profile.
+Follow the pipeline gates and never skip the audit pod before anything goes to
+production.</pre>
+    </div>
+  </div>
+
+  <div class="ctx">
+    <h3>Claude Design</h3>
+    <p class="ctx-sub">The team audits and specs; you apply on the canvas.</p>
+    <ol class="steps">
+      <li>Finalize the design on the canvas.</li>
+      <li><b>Export → PNG/PDF</b> of each artboard (or download the <code>.dc.html</code> file).</li>
+      <li>Open a Claude Code session with the team and drag the files into <code>/design</code>.</li>
+      <li>Paste the audit briefing (the "Audit a design/site" block above).</li>
+      <li>The team returns findings + the fix spec in <code>/design</code> and <code>/docs</code>.</li>
+      <li>Apply the changes back on the canvas (by hand, or re-seeding via the <code>design</code> skill).</li>
+    </ol>
+    <p class="prompt-label">Ready prompt</p>
+    <div class="block" data-copy="Head: audit the design in /design. Run transition-interactive-audit-design (WCAG 2.2 AA, contrast, hierarchy, empty/error/loading states, conversion heuristics) and return blocking vs. non-blocking findings with the specific element + metric. Then have transition-interactive-creative-direction + transition-interactive-ui-designer propose the fixes as a spec in /design and /docs. I approve before anything is applied.">
+      <span class="badge">copy</span>
+      <pre>Head: audit the design in /design. Run transition-interactive-audit-design (WCAG 2.2 AA,
+contrast, hierarchy, empty/error/loading states, conversion heuristics) and
+return blocking vs. non-blocking findings with the specific element + metric.
+Then have transition-interactive-creative-direction + transition-interactive-ui-designer propose the fixes as
+a spec in /design and /docs. I approve before anything is applied.</pre>
+    </div>
+  </div>
+
+  <h2>Reminders</h2>
+  <ul class="reminders">
+    <li>You don't call the auditors to <b>resolve</b> what they produced — the verdict is resolved only by the <b>Head</b> (you), deciding to fix and resubmit.</li>
+    <li class="critical">The <b>audit pod is always the last step</b> before production — never skipped for a deadline.</li>
+    <li>Design/content agents only write in <b>/design</b>, <b>/docs</b>, <b>/content</b> — enforced by the <code>PreToolUse</code> hook.</li>
+  </ul>
+  </main>
+
+  <footer>
+    <span>transition-interactive · Head + 33 subagents</span>
+    <span>Tap a command to copy</span>
+  </footer>
+</div>
+
+<div id="toast" role="status" aria-live="polite">Copied</div>
+
+<script>
+  (function(){
+    var toast = document.getElementById('toast');
+    var t;
+    function flash(msg){
+      toast.textContent = msg || 'Copied';
+      toast.classList.add('show');
+      clearTimeout(t);
+      t = setTimeout(function(){ toast.classList.remove('show'); }, 1400);
+    }
+    function copy(text, el){
+      function ok(){
+        if(el){
+          el.classList.add('copied');
+          var lbl = el.querySelector('.copyhint, .badge');
+          var prev = lbl ? lbl.textContent : null;
+          if(lbl){ lbl.textContent = 'copied ✓'; }
+          setTimeout(function(){
+            el.classList.remove('copied');
+            if(lbl && prev !== null){ lbl.textContent = prev; }
+          }, 1400);
+        }
+        flash('Copied ✓');
+      }
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(ok, function(){ legacy(text, ok); });
+        } else { legacy(text, ok); }
+      }catch(e){ legacy(text, ok); }
+    }
+    function legacy(text, ok){
+      try{
+        var ta=document.createElement('textarea');
+        ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.focus(); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta); ok();
+      }catch(e){ flash('Select and copy manually'); }
+    }
+    document.querySelectorAll('.cmd').forEach(function(btn){
+      var nm = btn.querySelector('.name');
+      if(nm && !btn.id){ btn.id = 'cmd-' + nm.textContent.trim(); }
+      btn.addEventListener('click', function(){
+        var p = btn.querySelector('.phrase');
+        copy(p ? p.textContent.trim() : '', btn);
+      });
+    });
+    document.querySelectorAll('.block').forEach(function(b){
+      b.setAttribute('tabindex','0'); b.setAttribute('role','button');
+      function go(){ copy(b.getAttribute('data-copy')||'', b); }
+      b.addEventListener('click', go);
+      b.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } });
+    });
+
+    /* Filter the 33 command cards by name/phrase. */
+    var filter = document.getElementById('filter');
+    var clearBtn = document.getElementById('filter-clear');
+    var noHits = document.getElementById('no-hits');
+    var cmds = Array.prototype.slice.call(document.querySelectorAll('#agents ~ .group .cmd, .group .cmd'));
+    var groups = Array.prototype.slice.call(document.querySelectorAll('.group'));
+    function applyFilter(){
+      var q = (filter.value || '').trim().toLowerCase();
+      var hits = 0;
+      cmds.forEach(function(c){
+        var t = c.textContent.toLowerCase();
+        var show = !q || t.indexOf(q) !== -1;
+        c.hidden = !show; if(show) hits++;
+      });
+      groups.forEach(function(g){
+        var any = g.querySelector('.cmd:not([hidden])');
+        g.hidden = !any;
+      });
+      noHits.classList.toggle('show', q && hits === 0);
+      clearBtn.hidden = !q;
+    }
+    if(filter){
+      filter.addEventListener('input', applyFilter);
+      filter.addEventListener('keydown', function(e){ if(e.key==='Escape'){ filter.value=''; applyFilter(); filter.blur(); } });
+      clearBtn.addEventListener('click', function(){ filter.value=''; applyFilter(); filter.focus(); });
+      document.addEventListener('keydown', function(e){
+        if(e.key==='/' && document.activeElement !== filter &&
+           !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement||{}).tagName||'')){
+          e.preventDefault(); filter.focus();
+        }
+      });
+    }
+
+    /* Scroll-spy: mark the nav link for the section in view. */
+    var navLinks = {};
+    document.querySelectorAll('.nav a[href^="#"]').forEach(function(a){
+      navLinks[a.getAttribute('href').slice(1)] = a;
+    });
+    var spyTargets = Object.keys(navLinks)
+      .map(function(id){ return document.getElementById(id); }).filter(Boolean);
+    if('IntersectionObserver' in window && spyTargets.length){
+      var current = null;
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){
+            if(current) current.removeAttribute('aria-current');
+            current = navLinks[en.target.id];
+            if(current) current.setAttribute('aria-current','true');
+          }
+        });
+      }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+      spyTargets.forEach(function(t){ io.observe(t); });
+    }
+  })();
+</script>
+<script>
+  (function(){
+    var bundles = document.querySelectorAll('details.bundle');
+    var ea=document.getElementById('expand-all'), ca=document.getElementById('collapse-all');
+    if(ea) ea.addEventListener('click', function(){ bundles.forEach(function(d){ d.open=true; }); });
+    if(ca) ca.addEventListener('click', function(){ bundles.forEach(function(d){ d.open=false; }); });
+  })();
+</script>
+</body>
+</html>
